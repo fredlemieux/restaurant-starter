@@ -1,0 +1,7 @@
+node_modules
+dist
+.astro
+storybook-static
+coverage
+pnpm-lock.yaml
+*.md

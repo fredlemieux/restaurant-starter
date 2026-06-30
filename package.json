@@ -1,0 +1,34 @@
+{
+  "name": "restaurant-starter",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Open-source headless-CMS scaffold for small restaurant websites — Astro + Sanity + Cloudflare Pages",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=10"
+  },
+  "packageManager": "pnpm@10.16.0",
+  "scripts": {
+    "dev": "pnpm -r --parallel --stream dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r --stream test",
+    "test:e2e": "pnpm --filter @restaurant/web test:e2e",
+    "typecheck": "pnpm -r --stream typecheck",
+    "lint": "pnpm -r --stream lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "storybook": "pnpm --filter @restaurant/ui storybook",
+    "storybook:build": "pnpm --filter @restaurant/ui build-storybook",
+    "studio": "pnpm --filter @restaurant/studio dev",
+    "web": "pnpm --filter @restaurant/web dev",
+    "clean": "pnpm -r exec rm -rf node_modules dist .astro storybook-static coverage && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.0",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.6.0",
+    "typescript": "^6.0.0"
+  }
+}
