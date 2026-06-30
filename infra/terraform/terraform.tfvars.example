@@ -1,0 +1,26 @@
+project_name          = "my-restaurant"
+domain                = "example.com"
+zone_name             = "example.com"
+cloudflare_account_id = "your-cf-account-id"
+github_repo           = "your-org/restaurant-starter"
+
+# Set with: TF_VAR_cloudflare_api_token=... terraform apply
+# or in your secret store. Do NOT commit.
+# cloudflare_api_token = "..."
+
+build_env_vars = {
+  PUBLIC_SITE_URL    = "https://example.com"
+  SANITY_PROJECT_ID  = "abc123"
+  SANITY_DATASET     = "production"
+  SANITY_API_VERSION = "2026-01-01"
+  CONTACT_TO_ADDRESS = "hello@example.com"
+  CONTACT_FROM_ADDRESS = "no-reply@example.com"
+}
+
+# Provide via secret store, not committed.
+# build_env_secrets = {
+#   SANITY_READ_TOKEN     = "..."
+#   SANITY_WEBHOOK_SECRET = "..."
+#   RESEND_API_KEY        = "..."
+#   TURNSTILE_SECRET_KEY  = "..."   # also exposed as cloudflare_turnstile_widget.contact.secret output
+# }
