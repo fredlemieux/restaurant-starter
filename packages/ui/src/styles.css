@@ -1,0 +1,27 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Cormorant Garamond', ui-serif, Georgia, serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  --color-bone: oklch(0.97 0.01 80);
+  --color-ink: oklch(0.21 0.02 260);
+  --color-clay: oklch(0.58 0.13 38);
+  --color-clay-dark: oklch(0.42 0.13 38);
+  --color-sage: oklch(0.62 0.05 145);
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    background: var(--color-bone);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+}
