@@ -1,0 +1,49 @@
+name: deploy-prod
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  deploy:
+    name: Cloudflare Pages production
+    runs-on: ubuntu-latest
+    env:
+      SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID }}
+      SANITY_DATASET: ${{ secrets.SANITY_DATASET }}
+      SANITY_READ_TOKEN: ${{ secrets.SANITY_READ_TOKEN }}
+      PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @restaurant/web build
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy apps/web/dist --project-name=${{ secrets.CLOUDFLARE_PAGES_PROJECT }} --branch=main
+
+  lighthouse:
+    name: Lighthouse budget
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            ${{ secrets.PUBLIC_SITE_URL }}
+            ${{ secrets.PUBLIC_SITE_URL }}/menus
+            ${{ secrets.PUBLIC_SITE_URL }}/contact
+          budgetPath: ./.github/lighthouse-budget.json
+          uploadArtifacts: true

@@ -1,0 +1,25 @@
+name: chromatic
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  visual:
+    name: Chromatic (Storybook visual diff)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - uses: chromaui/action@latest
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          workingDir: packages/ui
+          onlyChanged: true
+          exitOnceUploaded: true
