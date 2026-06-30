@@ -1,0 +1,13 @@
+---
+import Base from '@/layouts/Base.astro';
+import { PressGrid } from '@restaurant/ui';
+import { getPress } from '@/lib/queries';
+
+const press = await getPress();
+---
+
+<Base title="Press" description="In the press">
+  <div class="pt-24">
+    <PressGrid items={press} />
+  </div>
+</Base>

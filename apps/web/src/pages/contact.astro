@@ -1,0 +1,35 @@
+---
+import Base from '@/layouts/Base.astro';
+import { ContactForm, OpenTableEmbed } from '@restaurant/ui';
+import { getRestaurant } from '@/lib/queries';
+
+const restaurant = await getRestaurant();
+const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+---
+
+<Base title="Contact" description="Get in touch">
+  <div class="mx-auto max-w-5xl px-6 py-24 grid gap-12 md:grid-cols-2">
+    <div>
+      <h1 class="text-5xl mb-6">Contact</h1>
+      {restaurant?.phone && <p>Phone: <a href={`tel:${restaurant.phone}`} class="underline">{restaurant.phone}</a></p>}
+      {restaurant?.email && <p>Email: <a href={`mailto:${restaurant.email}`} class="underline">{restaurant.email}</a></p>}
+      {restaurant?.address && (
+        <address class="not-italic mt-4 text-sm">
+          {restaurant.address.line1}<br />
+          {restaurant.address.city} {restaurant.address.postcode}
+        </address>
+      )}
+      <h2 class="text-2xl mt-10 mb-3">Reservations</h2>
+      {restaurant?.openTableRid ? (
+        <OpenTableEmbed client:visible rid={restaurant.openTableRid} />
+      ) : (
+        <p class="text-sm text-(--color-ink)/70">Use the form below or phone to book.</p>
+      )}
+    </div>
+    <div>
+      <h2 class="text-2xl mb-4">Send us a message</h2>
+      <ContactForm client:load action="/api/contact" turnstileSiteKey={turnstileKey} />
+    </div>
+  </div>
+  {turnstileKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+</Base>

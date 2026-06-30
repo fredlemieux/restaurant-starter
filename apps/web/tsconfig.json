@@ -1,0 +1,13 @@
+{
+  "extends": "@restaurant/tsconfig/astro.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "types": ["astro/client", "node"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "tests", ".astro/types.d.ts", "astro.config.mjs"],
+  "exclude": ["dist", ".astro"]
+}

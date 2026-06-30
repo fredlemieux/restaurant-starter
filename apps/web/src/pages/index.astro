@@ -1,0 +1,49 @@
+---
+import Base from '@/layouts/Base.astro';
+import { Hero, OpeningHours, Button } from '@restaurant/ui';
+import { getRestaurant, getPress } from '@/lib/queries';
+import { imageUrl } from '@/lib/sanity';
+
+const restaurant = await getRestaurant();
+const press = await getPress();
+
+const heroImage = restaurant?.heroImage ? imageUrl(restaurant.heroImage) : undefined;
+---
+
+<Base
+  title={restaurant?.seo?.title ?? restaurant?.name ?? 'Restaurant'}
+  description={restaurant?.seo?.description ?? restaurant?.tagline}
+>
+  <Hero
+    name={restaurant?.name ?? 'Restaurant'}
+    tagline={restaurant?.tagline}
+    imageUrl={heroImage}
+    imageAlt=""
+    cta={<a href="/contact"><Button>Reserve a table</Button></a>}
+  />
+
+  <section class="mx-auto max-w-5xl px-6 py-16 grid gap-12 md:grid-cols-2">
+    {restaurant?.openingHours && <OpeningHours hours={restaurant.openingHours} />}
+    <div>
+      <h2 class="text-3xl mb-4">About</h2>
+      {restaurant?.tagline && <p class="text-lg mb-4">{restaurant.tagline}</p>}
+      <a href="/story" class="underline">Read our story →</a>
+    </div>
+  </section>
+
+  {press.length > 0 && (
+    <section class="bg-(--color-ink)/5 py-16">
+      <div class="mx-auto max-w-5xl px-6">
+        <h2 class="text-3xl text-center mb-8">In the press</h2>
+        <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {press.slice(0, 3).map((p) => (
+            <li class="bg-white rounded-lg p-6 border border-(--color-ink)/10">
+              <p class="font-display text-xl">“{p.quote}”</p>
+              <p class="mt-3 text-sm text-(--color-ink)/70">{p.publication}{p.author ? ` · ${p.author}` : ''}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+</Base>

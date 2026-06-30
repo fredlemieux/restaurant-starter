@@ -1,0 +1,11 @@
+---
+import { PortableText } from '@portabletext/react';
+import type { PortableTextBlock } from '@restaurant/schemas';
+
+interface Props {
+  blocks: PortableTextBlock[] | undefined;
+}
+const { blocks } = Astro.props;
+---
+
+{blocks && <div class="prose prose-stone mx-auto max-w-2xl"><PortableText value={blocks} /></div>}

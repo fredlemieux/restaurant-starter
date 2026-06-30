@@ -1,0 +1,44 @@
+---
+import '@/styles/global.css';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import { absoluteUrl } from '@/lib/url';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  noIndex?: boolean;
+}
+
+const { title, description, ogImage, noIndex = false } = Astro.props;
+const canonical = absoluteUrl(Astro.url.pathname);
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonical} />
+    {noIndex && <meta name="robots" content="noindex" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta property="og:url" content={canonical} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body class="min-h-dvh flex flex-col">
+    <Nav />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

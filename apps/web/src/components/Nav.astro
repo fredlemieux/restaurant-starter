@@ -1,0 +1,29 @@
+---
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/menus', label: 'Menus' },
+  { href: '/story', label: 'Story' },
+  { href: '/press', label: 'Press' },
+  { href: '/private-hire', label: 'Private hire' },
+  { href: '/contact', label: 'Contact' },
+];
+const path = Astro.url.pathname;
+---
+
+<header class="absolute inset-x-0 top-0 z-20">
+  <nav class="mx-auto max-w-6xl px-6 py-6 flex items-center justify-between text-white" aria-label="Primary">
+    <a href="/" class="font-display text-2xl">Restaurant</a>
+    <ul class="flex gap-6 text-sm">
+      {links.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class:list={['transition-opacity hover:opacity-100', path === link.href ? 'opacity-100' : 'opacity-80']}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>

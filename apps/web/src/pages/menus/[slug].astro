@@ -1,0 +1,15 @@
+---
+import Base from '@/layouts/Base.astro';
+import { MenuList } from '@restaurant/ui';
+import { getMenuBySlug } from '@/lib/queries';
+
+const { slug } = Astro.params;
+if (!slug) return Astro.redirect('/menus');
+
+const menu = await getMenuBySlug(slug);
+if (!menu) return new Response('Not found', { status: 404 });
+---
+
+<Base title={`${menu.title} — Menu`} description={menu.available}>
+  <MenuList menu={menu} />
+</Base>
