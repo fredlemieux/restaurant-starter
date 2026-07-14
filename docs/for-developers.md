@@ -13,10 +13,15 @@
 
 ```bash
 pnpm install
-cp .env.example .env                  # fill in values
-pnpm setup                            # one-time: connect to a Sanity project (interactive)
+# One-time: create a Sanity project at https://sanity.io/manage
+# then copy the project ID into both .env files:
+cp apps/studio/.env.example apps/studio/.env
+cp apps/web/.env.example apps/web/.env
+# ...edit both, set SANITY_PROJECT_ID=<id from Sanity dashboard>
 pnpm dev                              # web on :4321, studio on :3333
 ```
+
+Handy alias: `pnpm run sanity` opens the linked project's dashboard in your browser (uses `sanity manage` under the hood).
 
 In another terminal (optional, for contact-form testing):
 ```bash

@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "init": "sanity init",
+    "manage": "sanity manage",
     "dev": "sanity dev --port 3333",
     "start": "sanity start",
     "build": "sanity build",

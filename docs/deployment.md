@@ -6,13 +6,11 @@ The first deploy is about 30 minutes of clicking through Sanity + Cloudflare + R
 
 ### 1. Sanity
 
-```bash
-pnpm setup   # runs `sanity init` in apps/studio; answer prompts to create a project + dataset
-```
+1. Go to [sanity.io/manage](https://sanity.io/manage) → **New project** → give it a name, dataset `production`.
+2. Copy the **project ID** from the URL / dashboard.
+3. Once linked (via `SANITY_PROJECT_ID` in `apps/*/env`), you can re-open the dashboard any time with `pnpm run sanity`.
 
-Note the **project ID** that's printed. Stash it.
-
-In [manage.sanity.io](https://manage.sanity.io) → your project:
+Then in [manage.sanity.io](https://manage.sanity.io) → your project:
 - **API → CORS origins** — add `https://<your-domain>` and `https://*.<your-pages-project>.pages.dev` (Pages preview URLs), both with credentials enabled.
 - **API → Tokens** — create a read token; save as `SANITY_READ_TOKEN`.
 - **API → Webhooks** — add a webhook on `mutation` events pointing at the GitHub `repository_dispatch` endpoint (see `infra/terraform/sanity.tf` for the exact body).

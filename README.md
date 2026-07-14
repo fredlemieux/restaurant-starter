@@ -33,10 +33,18 @@ This repo solves it by putting content in either Git (devs) or Sanity (restauran
 
 ```bash
 pnpm install                       # install everything
-cp .env.example .env               # fill in Sanity + Resend + Turnstile keys
-pnpm setup                         # one-time: create Sanity project (interactive)
+cp apps/studio/.env.example apps/studio/.env  # add SANITY_PROJECT_ID (see below)
+cp apps/web/.env.example apps/web/.env        # same + Resend + Turnstile keys
 pnpm dev                           # web on :4321, studio on :3333
 ```
+
+**Create the Sanity project first** (browser flow, ~2 minutes):
+
+1. Go to [sanity.io/manage](https://sanity.io/manage) → **New project** → name it, dataset `production`.
+2. Copy the project ID from the URL / dashboard.
+3. Paste it into both `.env` files as `SANITY_PROJECT_ID=...`.
+
+Anytime after: `pnpm run sanity` opens the project's dashboard in your browser.
 
 ## Repo layout
 
