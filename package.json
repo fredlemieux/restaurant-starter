@@ -12,6 +12,7 @@
   "packageManager": "pnpm@10.16.0",
   "scripts": {
     "sanity": "pnpm --filter @restaurant/studio run manage",
+    "setup:env": "[ -f apps/studio/.env ] || cp apps/studio/.env.example apps/studio/.env; [ -f apps/web/.env ] || cp apps/web/.env.example apps/web/.env",
     "dev": "pnpm -r --parallel --stream dev",
     "build": "pnpm -r build",
     "test": "pnpm -r --stream test",

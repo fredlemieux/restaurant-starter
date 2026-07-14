@@ -13,11 +13,9 @@
 
 ```bash
 pnpm install
-# One-time: create a Sanity project at https://sanity.io/manage
-# then copy the project ID into both .env files:
-cp apps/studio/.env.example apps/studio/.env
-cp apps/web/.env.example apps/web/.env
-# ...edit both, set SANITY_PROJECT_ID=<id from Sanity dashboard>
+pnpm run setup:env                    # copy .env.example → .env in studio + web
+# One-time: create a Sanity project at https://sanity.io/manage,
+# then paste its ID as SANITY_PROJECT_ID in both .env files.
 pnpm dev                              # web on :4321, studio on :3333
 ```
 
