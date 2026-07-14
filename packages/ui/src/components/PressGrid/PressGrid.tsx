@@ -21,9 +21,9 @@ export function PressGrid({ items, className }: PressGridProps) {
 
 function PressCard({ item }: { item: PressMention }) {
   return (
-    <li className="rounded-lg border border-(--color-ink)/10 bg-white p-6">
+    <li className="rounded-lg border border-ink/10 bg-white p-6">
       <p className="font-display text-2xl mb-3">“{item.quote}”</p>
-      <p className="text-sm text-(--color-ink)/70">
+      <p className="text-sm text-ink/70">
         <span className="font-medium">{item.publication}</span>
         {item.author ? <> · {item.author}</> : null}
       </p>

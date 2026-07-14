@@ -49,7 +49,7 @@ export function ContactForm({ action, turnstileSiteKey, className }: ContactForm
 
   if (state.kind === 'success') {
     return (
-      <p role="status" className={cn('text-(--color-sage)', className)}>
+      <p role="status" className={cn('text-sage', className)}>
         Thanks — we’ll be in touch shortly.
       </p>
     );
@@ -69,7 +69,7 @@ export function ContactForm({ action, turnstileSiteKey, className }: ContactForm
           name="message"
           required
           rows={4}
-          className="border border-(--color-ink)/20 rounded-md px-3 py-2"
+          className="border border-ink/20 rounded-md px-3 py-2"
         />
       </label>
       {turnstileSiteKey ? (
@@ -107,7 +107,7 @@ function Field({ name, label, type = 'text', required, min, max }: FieldProps) {
         required={required}
         min={min}
         max={max}
-        className="border border-(--color-ink)/20 rounded-md px-3 py-2"
+        className="border border-ink/20 rounded-md px-3 py-2"
       />
     </label>
   );

@@ -11,9 +11,9 @@ const menus = await getMenus();
     <ul class="space-y-4">
       {menus.map((m) => (
         <li>
-          <a href={`/menus/${m.slug.current}`} class="block py-3 border-b border-(--color-ink)/10 hover:bg-(--color-ink)/5 -mx-4 px-4 rounded">
+          <a href={`/menus/${m.slug.current}`} class="block py-3 border-b border-ink/10 hover:bg-ink/5 -mx-4 px-4 rounded">
             <span class="text-2xl">{m.title}</span>
-            {m.available && <span class="block text-sm text-(--color-ink)/70">{m.available}</span>}
+            {m.available && <span class="block text-sm text-ink/70">{m.available}</span>}
           </a>
         </li>
       ))}

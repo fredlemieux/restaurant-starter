@@ -23,7 +23,7 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
       {restaurant?.openTableRid ? (
         <OpenTableEmbed client:visible rid={restaurant.openTableRid} />
       ) : (
-        <p class="text-sm text-(--color-ink)/70">Use the form below or phone to book.</p>
+        <p class="text-sm text-ink/70">Use the form below or phone to book.</p>
       )}
     </div>
     <div>

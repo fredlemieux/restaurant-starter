@@ -9,10 +9,10 @@ try {
 }
 ---
 
-<footer class="border-t border-(--color-ink)/10 mt-16 py-12 text-sm text-(--color-ink)/70">
+<footer class="border-t border-ink/10 mt-16 py-12 text-sm text-ink/70">
   <div class="mx-auto max-w-6xl px-6 grid gap-8 sm:grid-cols-3">
     <div>
-      <p class="font-display text-2xl text-(--color-ink)">{restaurant?.name ?? 'Restaurant'}</p>
+      <p class="font-display text-2xl text-ink">{restaurant?.name ?? 'Restaurant'}</p>
       {restaurant?.tagline && <p class="mt-1">{restaurant.tagline}</p>}
     </div>
     {restaurant?.address && (
@@ -30,5 +30,5 @@ try {
       {restaurant?.email && <a href={`mailto:${restaurant.email}`} class="underline">{restaurant.email}</a>}
     </div>
   </div>
-  <p class="mt-10 text-center text-xs text-(--color-ink)/50">© {new Date().getFullYear()} {restaurant?.name ?? 'Restaurant'}</p>
+  <p class="mt-10 text-center text-xs text-ink/50">© {new Date().getFullYear()} {restaurant?.name ?? 'Restaurant'}</p>
 </footer>

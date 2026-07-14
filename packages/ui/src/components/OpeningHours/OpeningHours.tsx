@@ -27,7 +27,7 @@ export function OpeningHours({ hours, className }: OpeningHoursProps) {
           <DayRow key={day} day={day} schedule={byDay.get(day)} />
         ))}
       </dl>
-      {hours.note ? <p className="mt-4 text-sm text-(--color-ink)/70">{hours.note}</p> : null}
+      {hours.note ? <p className="mt-4 text-sm text-ink/70">{hours.note}</p> : null}
     </section>
   );
 }

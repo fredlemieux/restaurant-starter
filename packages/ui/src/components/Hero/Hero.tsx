@@ -21,7 +21,7 @@ export function Hero({ name, tagline, imageUrl, imageAlt, cta, className }: Hero
           loading="eager"
         />
       ) : (
-        <div aria-hidden className="absolute inset-0 -z-10 bg-(--color-ink)" />
+        <div aria-hidden className="absolute inset-0 -z-10 bg-ink" />
       )}
       <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
       <div className="mx-auto w-full max-w-6xl px-6 pb-16 text-white">
