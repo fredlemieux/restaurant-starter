@@ -34,7 +34,7 @@ This repo solves it by putting content in either Git (devs) or Sanity (restauran
 ```bash
 pnpm install                       # install everything
 cp .env.example .env               # fill in Sanity + Resend + Turnstile keys
-pnpm --filter @restaurant/studio sanity init   # one-time: create Sanity project
+pnpm setup                         # one-time: create Sanity project (interactive)
 pnpm dev                           # web on :4321, studio on :3333
 ```
 

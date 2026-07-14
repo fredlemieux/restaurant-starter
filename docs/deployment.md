@@ -7,8 +7,7 @@ The first deploy is about 30 minutes of clicking through Sanity + Cloudflare + R
 ### 1. Sanity
 
 ```bash
-cd apps/studio
-pnpm sanity init --create-project "Your Restaurant" --dataset production
+pnpm setup   # runs `sanity init` in apps/studio; answer prompts to create a project + dataset
 ```
 
 Note the **project ID** that's printed. Stash it.

@@ -14,8 +14,7 @@
 ```bash
 pnpm install
 cp .env.example .env                  # fill in values
-cd apps/studio && pnpm sanity init    # one-time: connect to a Sanity project
-cd ../..
+pnpm setup                            # one-time: connect to a Sanity project (interactive)
 pnpm dev                              # web on :4321, studio on :3333
 ```
 

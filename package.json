@@ -11,6 +11,7 @@
   },
   "packageManager": "pnpm@10.16.0",
   "scripts": {
+    "setup": "pnpm --filter @restaurant/studio run init",
     "dev": "pnpm -r --parallel --stream dev",
     "build": "pnpm -r build",
     "test": "pnpm -r --stream test",
