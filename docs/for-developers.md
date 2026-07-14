@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- Node 22+ (`nvm install` / `nvm use` in this repo picks it up from `.nvmrc`)
+- Node 24+ (`nvm install` / `fnm use` in this repo picks it up from `.nvmrc`)
 - pnpm 10+ (`corepack enable && corepack prepare pnpm@10 --activate`)
 - Docker (only needed for the local mail catcher)
 - A Sanity account + project ID (free tier is fine)
