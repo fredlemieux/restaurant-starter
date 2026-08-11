@@ -1,27 +1,50 @@
 @import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @theme {
+  /* Typography */
   --font-display: 'Cormorant Garamond', ui-serif, Georgia, serif;
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
 
-  --color-bone: oklch(0.97 0.01 80);
-  --color-ink: oklch(0.21 0.02 260);
+  /* Palette — cream page, near-black ink, warm gold accent */
+  --color-bone: oklch(0.97 0.008 80);
+  --color-bone-warm: oklch(0.94 0.02 70);
+  --color-ink: oklch(0.18 0.015 260);
+  --color-deep: oklch(0.12 0.01 260);
   --color-clay: oklch(0.58 0.13 38);
   --color-clay-dark: oklch(0.42 0.13 38);
+  --color-gold: oklch(0.75 0.13 82);
+  --color-gold-dark: oklch(0.58 0.11 82);
   --color-sage: oklch(0.62 0.05 145);
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     font-family: var(--font-sans);
     color: var(--color-ink);
     background: var(--color-bone);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
-
   h1,
   h2,
-  h3 {
+  h3,
+  h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.01em;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.05;
+  }
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-deep);
+  }
+  /* Utility escape for arbitrary line-height on display headings */
+  .font-display {
+    font-family: var(--font-display);
   }
 }
