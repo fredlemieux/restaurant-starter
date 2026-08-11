@@ -17,7 +17,8 @@ Open-source scaffold for small-restaurant websites — a direct alternative to t
 | Hosting | **Cloudflare Pages** — atomic deploys, instant rollback, no purge button to forget |
 | Infrastructure | **Terraform** — Cloudflare Pages + DNS + Turnstile + Sanity provisioned in one apply |
 | CI | **GitHub Actions** — typecheck, lint, unit tests, integration tests, build, Lighthouse budget |
-| Local dev | `pnpm dev` brings up web + studio + local mail catcher in one command |
+| Visual regression | **Playwright** `toHaveScreenshot()` baselines committed per route |
+| Offline / demo mode | **Fixture layer** — `SANITY_OFFLINE=1` renders the entire site with zero network |
 
 ## Why not WordPress?
 
@@ -29,67 +30,111 @@ The two reference sites this repo was designed against ([jamavarrestaurants.com]
 
 This repo solves it by putting content in either Git (devs) or Sanity (restaurant staff), building static output, and deploying atomically. Cache invalidation becomes a non-issue.
 
-## Quick start
+---
+
+## Quick start (2 minutes, zero external services)
 
 ```bash
-pnpm install                       # install everything
-pnpm run setup:env                 # copy .env.example → .env in studio + web (idempotent)
-# Edit apps/studio/.env and apps/web/.env — add SANITY_PROJECT_ID (see below)
-pnpm dev                           # web on :4321, studio on :3333
+pnpm install
+pnpm run setup:env          # copies .env.example → .env in web + studio
+pnpm dev                    # web on :4321, studio on :3333, storybook on :6006 if opened
+open http://localhost:4321
 ```
 
-### Credentials
+The scaffold ships with **`SANITY_OFFLINE=1` set by default** in `apps/web/.env.example` and a fixture layer at `apps/web/src/fixtures/*.ts` (the Bar Gaditano tapas bar in Málaga). The site renders end-to-end with **no Sanity account, no Resend key, no Turnstile key**. Everything works on a plane.
 
-The scaffold reads from three third-party services. **Sanity is required to boot.** Resend and Turnstile are only needed for the contact form to actually send / block spam — leave blank for local development.
+Connect real services when you're ready — see the two sections below.
 
-**1. Sanity — project + read token** (~2 min, browser only)
+---
 
-1. [sanity.io/manage](https://sanity.io/manage) → **New project** → name it, dataset `production`.
-2. Copy the **project ID** (visible in the URL and the dashboard).
-   → Paste into `SANITY_PROJECT_ID` in **both** `apps/studio/.env` and `apps/web/.env`.
-3. Same project → **API** tab → **Tokens** → **Add API token**.
-   - Name: `web-runtime`
-   - Permissions: **Viewer** (least privilege — read-only)
-   - Copy the token immediately, it's shown once.
-   → Paste into `SANITY_READ_TOKEN` in `apps/web/.env`.
-4. Same **API** tab → **CORS origins** → **Add** `http://localhost:4321` (dev) and `https://<your-domain>` (prod). Enable credentials.
+## Connecting real Sanity (~5 minutes)
 
-Anytime after: `pnpm run sanity` opens the project's dashboard.
+1. Create a project at [sanity.io/manage](https://sanity.io/manage) → **New project**, name it, dataset `production`.
+2. Copy the **Project ID** from the URL bar.
+3. Paste into both `apps/studio/.env` and `apps/web/.env` as `SANITY_PROJECT_ID=<id>`.
+4. Same project → **API** tab → **Tokens** → **Add API token**:
+   - `web-runtime` — **Viewer** — paste as `SANITY_READ_TOKEN` in `apps/web/.env`
+   - `seed-and-migrate` — **Editor** — paste as `SANITY_WRITE_TOKEN` in `apps/web/.env`
+5. Same **API** tab → **CORS origins** → **Add** `http://localhost:4321` and your production origin. Enable credentials.
+6. Seed the dataset from the fixture data:
 
-**2. Resend — contact form email** (~2 min)
+   ```bash
+   pnpm seed
+   ```
 
-1. [resend.com](https://resend.com) → sign up → **API Keys** → **Create API Key**.
-   - Permissions: **Sending access** (write-only)
-   - Copy immediately.
-   → Paste into `RESEND_API_KEY` in `apps/web/.env`.
-2. [resend.com/domains](https://resend.com/domains) → **Add domain** → follow the DNS records (SPF, DKIM, MX).
-   Verification usually takes a few minutes. Without a verified domain you can only send from `onboarding@resend.dev` (fine for local testing).
-3. Set `CONTACT_TO_ADDRESS` (where enquiries land) and `CONTACT_FROM_ADDRESS` (must match your verified sending domain).
+   Writes restaurant + menus + press + events in one idempotent transaction. Re-runs update in place.
 
-**3. Cloudflare Turnstile — anti-spam** (~1 min, optional)
+7. Flip to real Sanity:
 
-1. [dash.cloudflare.com](https://dash.cloudflare.com) → **Turnstile** → **Add site**.
-   - Domain: your prod domain + `localhost` for testing.
-   - Widget mode: `Managed`.
-2. Copy the **Site key** → `PUBLIC_TURNSTILE_SITE_KEY` in `apps/web/.env`.
-3. Copy the **Secret key** → `TURNSTILE_SECRET_KEY` in `apps/web/.env`.
+   ```bash
+   # apps/web/.env
+   SANITY_OFFLINE=0
+   ```
 
-Leave both blank and the contact form skips the challenge entirely.
+   Restart `pnpm dev`. The site now reads from your Sanity dataset. Edit content at http://localhost:3333, refresh :4321, watch it change.
+
+8. Hero image: upload one at http://localhost:3333 → Media Library → drag into Restaurant → Hero image. (The `heroImageUrl` string field on the Restaurant type is a fixture-mode escape hatch and is ignored when real `heroImage` is set.)
+
+## Connecting Resend + Turnstile (optional, ~3 minutes)
+
+Only needed for the contact form to actually send email + block spam.
+
+- **Resend** — [resend.com](https://resend.com) → API Keys → Create → "Sending access" → paste as `RESEND_API_KEY` in `apps/web/.env`. Verify a domain at [resend.com/domains](https://resend.com/domains) then update `CONTACT_FROM_ADDRESS`.
+- **Turnstile** — [dash.cloudflare.com](https://dash.cloudflare.com) → Turnstile → Add site → paste site key as `PUBLIC_TURNSTILE_SITE_KEY` and secret as `TURNSTILE_SECRET_KEY` in `apps/web/.env`.
+
+Leave both blank and the contact form silently skips the challenge — fine for local development.
+
+---
+
+## Common commands
+
+| Command | What it does |
+|---------|--------------|
+| `pnpm dev` | Web + studio + any package dev servers in parallel |
+| `pnpm --filter @restaurant/web dev` | Just the Astro site on :4321 |
+| `pnpm storybook` | Component library preview on :6006 |
+| `pnpm sanity` | Opens the Sanity project dashboard in the browser |
+| `pnpm seed` | Seeds the connected Sanity dataset from fixture content |
+| `pnpm test` | Unit tests across all packages (Vitest) |
+| `pnpm test:e2e` | Playwright end-to-end + visual regression |
+| `pnpm typecheck` | astro-check + tsc across the monorepo |
+| `pnpm lint` | ESLint across the monorepo |
+| `pnpm format` | Prettier auto-fix |
+| `pnpm format:check` | Prettier check without writes (matches CI) |
+| `pnpm build` | Production build of the web app for Cloudflare Pages |
+
+## Visual regression tests
+
+`apps/web/tests/e2e/visual.spec.ts` full-page-screenshots eight routes on every run and compares against baselines committed under `visual.spec.ts-snapshots/`. This is the safety net that catches "hero doesn't render / nav invisible / utility classes missing" bugs that pure behaviour tests slip past.
+
+After intentional visual changes:
+
+```bash
+pnpm --filter @restaurant/web exec playwright test visual.spec.ts --update-snapshots
+git add apps/web/tests/e2e/visual.spec.ts-snapshots
+git commit -m "test(web): update visual baselines"
+```
+
+---
 
 ## Repo layout
 
 ```
 apps/
-  web/             # Astro site (the public-facing thing)
-  studio/          # Sanity Studio (the editor surface)
+  web/                   # Astro site (public-facing thing)
+    src/fixtures/        # Bar Gaditano fixture — served when SANITY_OFFLINE=1
+    scripts/seed-sanity.ts
+    tests/e2e/           # Playwright: smoke, contact, visual regression
+    public/media/        # Local image cache (gitignored, see SOURCES.md)
+  studio/                # Sanity Studio (editor surface)
 packages/
-  ui/              # React component library + Storybook + tests
-  schemas/         # Sanity schemas, shared between web and studio
-  config/          # Shared ESLint + TS configs
+  ui/                    # React component library + Storybook + tests
+    src/styles.css       # Tailwind entry + theme tokens + @source scan
+  schemas/               # Sanity schemas + shared TypeScript types
+  config/                # Shared ESLint + TS configs
 infra/
-  terraform/       # Cloudflare + Sanity provisioning
-docs/              # for-developers, for-restaurant-owners, architecture
-.github/workflows/ # CI + preview deploys + prod deploys + content webhook
+  terraform/             # Cloudflare + Sanity provisioning
+.github/workflows/       # CI + preview deploys + prod deploys + content webhook
 ```
 
 ## Docs
