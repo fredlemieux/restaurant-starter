@@ -16,6 +16,9 @@ storybook-static/
 apps/studio/dist/
 apps/studio/.sanity/
 
+# cloudflare wrangler local state (miniflare cache, KV, R2)
+.wrangler/
+
 # env
 .env
 .env.local
