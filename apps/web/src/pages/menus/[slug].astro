@@ -1,13 +1,21 @@
 ---
 import Base from '@/layouts/Base.astro';
 import { MenuList } from '@restaurant/ui';
-import { getMenuBySlug } from '@/lib/queries';
+import { getMenus } from '@/lib/queries';
+import type { Menu } from '@restaurant/schemas';
 
-const { slug } = Astro.params;
-if (!slug) return Astro.redirect('/menus');
+export async function getStaticPaths() {
+  const menus = await getMenus();
+  return menus.map((menu) => ({
+    params: { slug: menu.slug.current },
+    props: { menu },
+  }));
+}
 
-const menu = await getMenuBySlug(slug);
-if (!menu) return new Response('Not found', { status: 404 });
+interface Props {
+  menu: Menu;
+}
+const { menu } = Astro.props;
 ---
 
 <Base title={`${menu.title} — Menu`} description={menu.available}>
