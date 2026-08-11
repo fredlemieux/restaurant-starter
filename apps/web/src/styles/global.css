@@ -1,2 +1,4 @@
-@import 'tailwindcss';
+/* Re-exports the shared theme + tailwind entry from @restaurant/ui. That
+ * file owns @import 'tailwindcss' plus all @source scanning directives,
+ * so pages and components across the monorepo get the same utilities. */
 @import '@restaurant/ui/styles.css';

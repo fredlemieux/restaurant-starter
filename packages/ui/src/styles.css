@@ -1,10 +1,14 @@
 @import 'tailwindcss';
 
+/* Tell Tailwind's JIT which source files to scan for class usage. Auto-
+ * detection only covers the vite project root — in a monorepo the ui
+ * components (this package) and the astro pages (apps/web) are outside
+ * that root and won't be scanned unless listed here explicitly. */
+@source './**/*.{ts,tsx}';
+@source '../../../apps/web/src/**/*.{astro,ts,tsx}';
+
 /* Web fonts (Cormorant Garamond, Inter) are loaded via <link> in Base.astro
- * and Storybook's preview head. PostCSS forbids @import after any @layer
- * statement, and Vite inlines Tailwind's @import which contains @layer, so a
- * CSS-level @import for fonts would land in the wrong position after
- * compilation and be stripped with a warning. */
+ * and Storybook's preview head — see comment there for why not via @import. */
 
 @theme {
   /* Typography */
