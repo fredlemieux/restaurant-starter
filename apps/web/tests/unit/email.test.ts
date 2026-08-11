@@ -23,9 +23,9 @@ describe('sendContactEmail', () => {
   it('throws when any env var is missing', async () => {
     vi.stubEnv('RESEND_API_KEY', '');
     const { sendContactEmail } = await import('../../src/lib/email');
-    await expect(
-      sendContactEmail({ name: 'A', email: 'a@b.co', message: 'm' }),
-    ).rejects.toThrow(/email environment is not fully configured/i);
+    await expect(sendContactEmail({ name: 'A', email: 'a@b.co', message: 'm' })).rejects.toThrow(
+      /email environment is not fully configured/i,
+    );
   });
 
   it('sends to the configured recipient with reply-to as the sender', async () => {
@@ -56,9 +56,9 @@ describe('sendContactEmail', () => {
   it('surfaces the Resend error message on failure', async () => {
     sendMock.mockResolvedValue({ data: null, error: { message: 'API key revoked' } });
     const { sendContactEmail } = await import('../../src/lib/email');
-    await expect(
-      sendContactEmail({ name: 'a', email: 'a@b.co', message: 'm' }),
-    ).rejects.toThrow('API key revoked');
+    await expect(sendContactEmail({ name: 'a', email: 'a@b.co', message: 'm' })).rejects.toThrow(
+      'API key revoked',
+    );
   });
 
   it('omits empty optional lines from the rendered text body', async () => {

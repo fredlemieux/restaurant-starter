@@ -8,4 +8,10 @@ interface Props {
 const { blocks } = Astro.props;
 ---
 
-{blocks && <div class="prose prose-stone mx-auto max-w-2xl"><PortableText value={blocks} /></div>}
+{
+  blocks && (
+    <div class="prose prose-stone mx-auto max-w-2xl">
+      <PortableText value={blocks} />
+    </div>
+  )
+}

@@ -9,7 +9,7 @@ export interface PressGridProps {
 export function PressGrid({ items, className }: PressGridProps) {
   return (
     <section className={cn('mx-auto w-full max-w-5xl px-6 py-12', className)} aria-label="Press">
-      <h2 className="text-4xl text-center mb-8">In the press</h2>
+      <h2 className="mb-8 text-center text-4xl">In the press</h2>
       <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
           <PressCard key={item._id} item={item} />
@@ -21,14 +21,19 @@ export function PressGrid({ items, className }: PressGridProps) {
 
 function PressCard({ item }: { item: PressMention }) {
   return (
-    <li className="rounded-lg border border-ink/10 bg-white p-6">
-      <p className="font-display text-2xl mb-3">“{item.quote}”</p>
-      <p className="text-sm text-ink/70">
+    <li className="border-ink/10 rounded-lg border bg-white p-6">
+      <p className="font-display mb-3 text-2xl">“{item.quote}”</p>
+      <p className="text-ink/70 text-sm">
         <span className="font-medium">{item.publication}</span>
         {item.author ? <> · {item.author}</> : null}
       </p>
       {item.url ? (
-        <a href={item.url} className="mt-4 inline-block text-sm underline" target="_blank" rel="noreferrer noopener">
+        <a
+          href={item.url}
+          className="mt-4 inline-block text-sm underline"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
           Read article
         </a>
       ) : null}

@@ -11,7 +11,7 @@ export function MenuList({ menu, className }: MenuListProps) {
     <article className={cn('mx-auto w-full max-w-3xl px-6 py-12', className)}>
       <header className="mb-10 text-center">
         <h2 className="text-4xl">{menu.title}</h2>
-        {menu.available ? <p className="mt-2 text-sm text-ink/70">{menu.available}</p> : null}
+        {menu.available ? <p className="text-ink/70 mt-2 text-sm">{menu.available}</p> : null}
       </header>
       <div className="space-y-12">
         {menu.sections.map((section) => (
@@ -25,11 +25,11 @@ export function MenuList({ menu, className }: MenuListProps) {
 function MenuSectionBlock({ section }: { section: MenuSection }) {
   return (
     <section>
-      <h3 className="text-2xl mb-2">{section.title}</h3>
+      <h3 className="mb-2 text-2xl">{section.title}</h3>
       {section.description ? (
-        <p className="text-sm text-ink/70 mb-4">{section.description}</p>
+        <p className="text-ink/70 mb-4 text-sm">{section.description}</p>
       ) : null}
-      <ul className="divide-y divide-ink/10">
+      <ul className="divide-ink/10 divide-y">
         {section.items.map((item) => (
           <MenuItemRow key={item.name} item={item} />
         ))}
@@ -40,19 +40,17 @@ function MenuSectionBlock({ section }: { section: MenuSection }) {
 
 function MenuItemRow({ item }: { item: MenuItem }) {
   return (
-    <li className="py-4 flex items-start justify-between gap-6">
+    <li className="flex items-start justify-between gap-6 py-4">
       <div className="flex-1">
         <div className="flex items-baseline gap-2">
           <span className="font-medium">{item.name}</span>
           {item.allergens?.length ? (
-            <span className="text-xs uppercase tracking-wide text-ink/50">
+            <span className="text-ink/50 text-xs uppercase tracking-wide">
               {item.allergens.join(', ')}
             </span>
           ) : null}
         </div>
-        {item.description ? (
-          <p className="text-sm text-ink/70 mt-1">{item.description}</p>
-        ) : null}
+        {item.description ? <p className="text-ink/70 mt-1 text-sm">{item.description}</p> : null}
       </div>
       {item.price ? <span className="shrink-0 tabular-nums">{item.price}</span> : null}
     </li>

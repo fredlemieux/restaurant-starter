@@ -21,9 +21,9 @@ describe('verifyTurnstile', () => {
   });
 
   it('returns ok when Cloudflare responds with success', async () => {
-    globalThis.fetch = vi.fn().mockResolvedValue(
-      new Response(JSON.stringify({ success: true }), { status: 200 }),
-    );
+    globalThis.fetch = vi
+      .fn()
+      .mockResolvedValue(new Response(JSON.stringify({ success: true }), { status: 200 }));
     const { verifyTurnstile } = await import('../../src/lib/turnstile');
     const result = await verifyTurnstile('token');
     expect(result.ok).toBe(true);
@@ -31,7 +31,9 @@ describe('verifyTurnstile', () => {
 
   it('returns error codes when Cloudflare rejects', async () => {
     globalThis.fetch = vi.fn().mockResolvedValue(
-      new Response(JSON.stringify({ success: false, 'error-codes': ['timeout'] }), { status: 200 }),
+      new Response(JSON.stringify({ success: false, 'error-codes': ['timeout'] }), {
+        status: 200,
+      }),
     );
     const { verifyTurnstile } = await import('../../src/lib/turnstile');
     const result = await verifyTurnstile('token');

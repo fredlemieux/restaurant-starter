@@ -22,10 +22,7 @@ export const page = defineType({
       name: 'body',
       title: 'Body',
       type: 'array',
-      of: [
-        { type: 'block' },
-        { type: 'image', options: { hotspot: true } },
-      ],
+      of: [{ type: 'block' }, { type: 'image', options: { hotspot: true } }],
     }),
     defineField({
       name: 'seo',

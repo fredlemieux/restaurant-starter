@@ -68,10 +68,7 @@ export const menus: Menu[] = [
     sections: [
       {
         title: 'Primeros',
-        items: [
-          { name: 'Gazpacho' },
-          { name: 'Ensalada de tomate rosa, atún, cebolleta' },
-        ],
+        items: [{ name: 'Gazpacho' }, { name: 'Ensalada de tomate rosa, atún, cebolleta' }],
       },
       {
         title: 'Segundos',

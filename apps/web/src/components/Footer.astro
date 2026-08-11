@@ -9,26 +9,41 @@ try {
 }
 ---
 
-<footer class="border-t border-ink/10 mt-16 py-12 text-sm text-ink/70">
-  <div class="mx-auto max-w-6xl px-6 grid gap-8 sm:grid-cols-3">
+<footer class="border-ink/10 text-ink/70 mt-16 border-t py-12 text-sm">
+  <div class="mx-auto grid max-w-6xl gap-8 px-6 sm:grid-cols-3">
     <div>
-      <p class="font-display text-2xl text-ink">{restaurant?.name ?? 'Restaurant'}</p>
+      <p class="font-display text-ink text-2xl">{restaurant?.name ?? 'Restaurant'}</p>
       {restaurant?.tagline && <p class="mt-1">{restaurant.tagline}</p>}
     </div>
-    {restaurant?.address && (
-      <div>
-        <p>{restaurant.address.line1}</p>
-        {restaurant.address.line2 && <p>{restaurant.address.line2}</p>}
-        <p>{restaurant.address.city} {restaurant.address.postcode}</p>
-        {restaurant.address.mapsUrl && (
-          <a href={restaurant.address.mapsUrl} class="underline mt-2 inline-block">Get directions</a>
-        )}
-      </div>
-    )}
+    {
+      restaurant?.address && (
+        <div>
+          <p>{restaurant.address.line1}</p>
+          {restaurant.address.line2 && <p>{restaurant.address.line2}</p>}
+          <p>
+            {restaurant.address.city} {restaurant.address.postcode}
+          </p>
+          {restaurant.address.mapsUrl && (
+            <a href={restaurant.address.mapsUrl} class="mt-2 inline-block underline">
+              Get directions
+            </a>
+          )}
+        </div>
+      )
+    }
     <div>
       {restaurant?.phone && <p>{restaurant.phone}</p>}
-      {restaurant?.email && <a href={`mailto:${restaurant.email}`} class="underline">{restaurant.email}</a>}
+      {
+        restaurant?.email && (
+          <a href={`mailto:${restaurant.email}`} class="underline">
+            {restaurant.email}
+          </a>
+        )
+      }
     </div>
   </div>
-  <p class="mt-10 text-center text-xs text-ink/50">© {new Date().getFullYear()} {restaurant?.name ?? 'Restaurant'}</p>
+  <p class="text-ink/50 mt-10 text-center text-xs">
+    © {new Date().getFullYear()}
+    {restaurant?.name ?? 'Restaurant'}
+  </p>
 </footer>

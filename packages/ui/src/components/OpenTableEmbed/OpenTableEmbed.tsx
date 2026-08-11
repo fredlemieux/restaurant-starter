@@ -51,7 +51,7 @@ export function OpenTableEmbed({
       ref={mountRef}
       data-testid="opentable-embed"
       aria-label="Reserve a table via OpenTable"
-      className={cn('w-full max-w-md mx-auto', className)}
+      className={cn('mx-auto w-full max-w-md', className)}
     />
   );
 }

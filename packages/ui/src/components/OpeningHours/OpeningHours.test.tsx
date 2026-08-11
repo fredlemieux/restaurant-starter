@@ -44,11 +44,7 @@ describe('OpeningHours', () => {
   });
 
   it('renders the free-text note when provided', () => {
-    render(
-      <OpeningHours
-        hours={{ schedule: [], note: 'Last orders 9pm.' }}
-      />,
-    );
+    render(<OpeningHours hours={{ schedule: [], note: 'Last orders 9pm.' }} />);
     expect(screen.getByText('Last orders 9pm.')).toBeInTheDocument();
   });
 });

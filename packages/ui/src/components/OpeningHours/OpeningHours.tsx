@@ -21,13 +21,13 @@ export function OpeningHours({ hours, className }: OpeningHoursProps) {
   const byDay = indexByDay(hours.schedule);
   return (
     <section className={cn('w-full max-w-md', className)} aria-label="Opening hours">
-      <h3 className="text-2xl mb-4">Opening hours</h3>
+      <h3 className="mb-4 text-2xl">Opening hours</h3>
       <dl className="space-y-1">
         {DAY_ORDER.map((day) => (
           <DayRow key={day} day={day} schedule={byDay.get(day)} />
         ))}
       </dl>
-      {hours.note ? <p className="mt-4 text-sm text-ink/70">{hours.note}</p> : null}
+      {hours.note ? <p className="text-ink/70 mt-4 text-sm">{hours.note}</p> : null}
     </section>
   );
 }

@@ -43,7 +43,10 @@ export function ContactForm({ action, turnstileSiteKey, className }: ContactForm
       dispatch({ kind: 'ok' });
       form.reset();
     } catch (err) {
-      dispatch({ kind: 'fail', message: err instanceof Error ? err.message : 'Something went wrong.' });
+      dispatch({
+        kind: 'fail',
+        message: err instanceof Error ? err.message : 'Something went wrong.',
+      });
     }
   }
 
@@ -56,7 +59,7 @@ export function ContactForm({ action, turnstileSiteKey, className }: ContactForm
   }
 
   return (
-    <form onSubmit={handleSubmit} className={cn('grid gap-4 max-w-lg', className)} noValidate>
+    <form onSubmit={handleSubmit} className={cn('grid max-w-lg gap-4', className)} noValidate>
       <Field name="name" label="Your name" required />
       <Field name="email" label="Email" type="email" required />
       <div className="grid grid-cols-2 gap-4">
@@ -69,14 +72,16 @@ export function ContactForm({ action, turnstileSiteKey, className }: ContactForm
           name="message"
           required
           rows={4}
-          className="border border-ink/20 rounded-md px-3 py-2"
+          className="border-ink/20 rounded-md border px-3 py-2"
         />
       </label>
       {turnstileSiteKey ? (
         <div className="cf-turnstile" data-sitekey={turnstileSiteKey} data-size="flexible" />
       ) : null}
       {state.kind === 'error' ? (
-        <p role="alert" className="text-sm text-red-700">{state.message}</p>
+        <p role="alert" className="text-sm text-red-700">
+          {state.message}
+        </p>
       ) : null}
       <Button type="submit" disabled={state.kind === 'submitting'}>
         {state.kind === 'submitting' ? 'Sending…' : 'Send'}
@@ -107,7 +112,7 @@ function Field({ name, label, type = 'text', required, min, max }: FieldProps) {
         required={required}
         min={min}
         max={max}
-        className="border border-ink/20 rounded-md px-3 py-2"
+        className="border-ink/20 rounded-md border px-3 py-2"
       />
     </label>
   );

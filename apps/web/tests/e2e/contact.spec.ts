@@ -2,7 +2,11 @@ import { test, expect } from '@playwright/test';
 
 test('contact form submits and shows success state', async ({ page }) => {
   await page.route('**/api/contact', (route) =>
-    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true }) }),
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ ok: true }),
+    }),
   );
 
   await page.goto('/contact');
