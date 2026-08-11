@@ -4,17 +4,44 @@ import { Button } from '@restaurant/ui';
 ---
 
 <Base title="Private hire" description="Host your event with us">
-  <div class="mx-auto max-w-3xl px-6 py-24">
-    <h1 class="text-5xl mb-8">Private hire</h1>
-    <p class="text-lg mb-6">
-      Available for full or partial buy-outs Monday through Wednesday and seasonal Sundays.
-      Capacity from 12 to 90 guests across the dining room and private snug.
+  <section class="mx-auto max-w-3xl px-6 pb-16 pt-32 text-center">
+    <p class="text-clay mb-5 text-xs uppercase tracking-[0.35em]">Events</p>
+    <h1 class="font-display text-6xl font-light leading-[0.95] md:text-7xl">Private hire.</h1>
+  </section>
+
+  <section
+    class="text-ink/85 mx-auto max-w-2xl space-y-6 px-6 pb-16 text-lg font-light leading-relaxed"
+  >
+    <p>
+      Available for full or partial buy-outs Monday through Wednesday and seasonal Sundays. Capacity
+      from twelve to ninety guests across the dining room and private snug.
     </p>
-    <p class="mb-8">
-      Tell us about your event using the form below and our events lead will get back to you within one working day.
+    <p>
+      Menus are built around the market — we don't run canapé lists or set menus that survive
+      between seasons. Wines and sherries are drawn from the small growers we work with year-round.
     </p>
-    <a href="/contact?subject=private-hire">
-      <Button size="lg">Get in touch</Button>
-    </a>
-  </div>
+    <p>Tell us about your event and our events lead will get back to you within one working day.</p>
+    <div class="pt-4">
+      <a href="/contact?subject=private-hire">
+        <Button size="lg">Get in touch</Button>
+      </a>
+    </div>
+  </section>
+
+  <section class="bg-bone-warm py-24">
+    <div class="mx-auto grid max-w-3xl gap-12 px-6 text-center md:grid-cols-3">
+      <div>
+        <p class="text-clay mb-3 text-xs uppercase tracking-[0.35em]">Capacity</p>
+        <p class="font-display text-4xl font-light">12&ndash;90</p>
+      </div>
+      <div>
+        <p class="text-clay mb-3 text-xs uppercase tracking-[0.35em]">Duration</p>
+        <p class="font-display text-4xl font-light">3 hours</p>
+      </div>
+      <div>
+        <p class="text-clay mb-3 text-xs uppercase tracking-[0.35em]">From</p>
+        <p class="font-display text-4xl font-light">€65 pp</p>
+      </div>
+    </div>
+  </section>
 </Base>

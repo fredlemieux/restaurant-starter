@@ -1,13 +1,48 @@
 ---
 import Base from '@/layouts/Base.astro';
-import { PressGrid } from '@restaurant/ui';
 import { getPress } from '@/lib/queries';
 
 const press = await getPress();
 ---
 
 <Base title="Press" description="In the press">
-  <div class="pt-24">
-    <PressGrid items={press} />
-  </div>
+  <section class="mx-auto max-w-3xl px-6 pb-16 pt-32 text-center">
+    <p class="text-clay mb-5 text-xs uppercase tracking-[0.35em]">Reviews</p>
+    <h1 class="font-display text-6xl font-light leading-[0.95] md:text-7xl">In the papers.</h1>
+  </section>
+  <section class="mx-auto max-w-5xl px-6 pb-32">
+    <ul class="grid gap-16 md:grid-cols-2">
+      {
+        press.map((p) => (
+          <li class="border-ink/10 border-t pt-12 text-center">
+            <p class="font-display text-3xl font-light italic leading-snug md:text-4xl">
+              &ldquo;{p.quote}&rdquo;
+            </p>
+            <p class="text-ink/60 mt-6 text-xs uppercase tracking-[0.25em]">
+              {p.publication}
+              {p.author ? ` · ${p.author}` : ''}
+            </p>
+            {p.publishedOn && (
+              <p class="text-ink/40 mt-1 text-xs">
+                {new Date(p.publishedOn).toLocaleDateString('en-GB', {
+                  month: 'long',
+                  year: 'numeric',
+                })}
+              </p>
+            )}
+            {p.url && (
+              <a
+                href={p.url}
+                target="_blank"
+                rel="noreferrer noopener"
+                class="hover:text-clay mt-6 inline-block border-b border-current pb-1 text-xs uppercase tracking-[0.25em]"
+              >
+                Read article
+              </a>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
 </Base>

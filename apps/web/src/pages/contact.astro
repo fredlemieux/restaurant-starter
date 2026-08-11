@@ -4,32 +4,66 @@ import { ContactForm, OpenTableEmbed } from '@restaurant/ui';
 import { getRestaurant } from '@/lib/queries';
 
 const restaurant = await getRestaurant();
-const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+// Normalise empty-string env var to `undefined` so server + client render
+// the same markup (an empty prop that only exists during hydration breaks
+// React's checksum with "Expected server HTML to contain a matching…").
+const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || undefined;
 ---
 
 <Base title="Contact" description="Get in touch">
-  <div class="mx-auto max-w-5xl px-6 py-24 grid gap-12 md:grid-cols-2">
+  <section class="mx-auto max-w-3xl px-6 pb-16 pt-32 text-center">
+    <p class="text-clay mb-5 text-xs uppercase tracking-[0.35em]">Get in touch</p>
+    <h1 class="font-display text-6xl font-light leading-[0.95] md:text-7xl">Contact.</h1>
+  </section>
+  <div class="mx-auto grid max-w-5xl gap-16 px-6 pb-32 md:grid-cols-2">
     <div>
-      <h1 class="text-5xl mb-6">Contact</h1>
-      {restaurant?.phone && <p>Phone: <a href={`tel:${restaurant.phone}`} class="underline">{restaurant.phone}</a></p>}
-      {restaurant?.email && <p>Email: <a href={`mailto:${restaurant.email}`} class="underline">{restaurant.email}</a></p>}
-      {restaurant?.address && (
-        <address class="not-italic mt-4 text-sm">
-          {restaurant.address.line1}<br />
-          {restaurant.address.city} {restaurant.address.postcode}
-        </address>
-      )}
-      <h2 class="text-2xl mt-10 mb-3">Reservations</h2>
-      {restaurant?.openTableRid ? (
-        <OpenTableEmbed client:visible rid={restaurant.openTableRid} />
-      ) : (
-        <p class="text-sm text-ink/70">Use the form below or phone to book.</p>
-      )}
+      <h2 class="font-display mb-6 text-3xl font-light">Come and find us</h2>
+      {
+        restaurant?.phone && (
+          <p>
+            Phone:{' '}
+            <a href={`tel:${restaurant.phone}`} class="underline">
+              {restaurant.phone}
+            </a>
+          </p>
+        )
+      }
+      {
+        restaurant?.email && (
+          <p>
+            Email:{' '}
+            <a href={`mailto:${restaurant.email}`} class="underline">
+              {restaurant.email}
+            </a>
+          </p>
+        )
+      }
+      {
+        restaurant?.address && (
+          <address class="mt-4 text-sm not-italic">
+            {restaurant.address.line1}
+            <br />
+            {restaurant.address.city} {restaurant.address.postcode}
+          </address>
+        )
+      }
+      <h2 class="mb-3 mt-10 text-2xl">Reservations</h2>
+      {
+        restaurant?.openTableRid ? (
+          <OpenTableEmbed client:visible rid={restaurant.openTableRid} />
+        ) : (
+          <p class="text-ink/70 text-sm">Use the form below or phone to book.</p>
+        )
+      }
     </div>
     <div>
-      <h2 class="text-2xl mb-4">Send us a message</h2>
+      <h2 class="mb-4 text-2xl">Send us a message</h2>
       <ContactForm client:load action="/api/contact" turnstileSiteKey={turnstileKey} />
     </div>
   </div>
-  {turnstileKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+  {
+    turnstileKey && (
+      <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
+    )
+  }
 </Base>
