@@ -20,7 +20,9 @@
     "sanity": "catalog:"
   },
   "devDependencies": {
+    "@restaurant/eslint-config": "workspace:*",
     "@restaurant/tsconfig": "workspace:*",
+    "eslint": "^9.39.0",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }

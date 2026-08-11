@@ -160,6 +160,9 @@ importers:
       '@playwright/test':
         specifier: ^1.61.0
         version: 1.61.1
+      '@restaurant/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/config/eslint
       '@restaurant/tsconfig':
         specifier: workspace:*
         version: link:../../packages/config/tsconfig
@@ -172,6 +175,9 @@ importers:
       '@types/react-dom':
         specifier: 'catalog:'
         version: 19.2.3(@types/react@19.2.17)
+      eslint:
+        specifier: ^9.39.0
+        version: 9.39.4(jiti@2.7.0)
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -214,9 +220,15 @@ importers:
         specifier: 'catalog:'
         version: 6.3.0(@babel/core@7.29.7)(@babel/runtime@7.29.7)(@emotion/is-prop-valid@1.4.0)(@noble/hashes@2.2.0)(@oclif/core@4.11.11)(@rolldown/plugin-babel@0.2.3(@babel/core@7.29.7)(@babel/runtime@7.29.7)(rolldown@1.1.3)(vite@8.1.1(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)(yaml@2.9.0)))(@sanity/cli-core@2.1.2(@noble/hashes@2.2.0)(@types/node@26.0.1)(esbuild@0.28.1)(yaml@2.9.0))(@types/node@26.0.1)(@types/react@19.2.17)(esbuild@0.28.1)(jiti@2.7.0)(prismjs@1.30.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(rolldown@1.1.3)(styled-components@6.4.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(typescript@6.0.3)
     devDependencies:
+      '@restaurant/eslint-config':
+        specifier: workspace:*
+        version: link:../config/eslint
       '@restaurant/tsconfig':
         specifier: workspace:*
         version: link:../config/tsconfig
+      eslint:
+        specifier: ^9.39.0
+        version: 9.39.4(jiti@2.7.0)
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -242,6 +254,9 @@ importers:
       '@chromatic-com/storybook':
         specifier: ^5.2.0
         version: 5.2.1(storybook@10.4.6(@testing-library/dom@10.4.1)(@types/react@19.2.17)(prettier@3.9.4)(react@19.2.7))
+      '@restaurant/eslint-config':
+        specifier: workspace:*
+        version: link:../config/eslint
       '@restaurant/tsconfig':
         specifier: workspace:*
         version: link:../config/tsconfig
@@ -284,6 +299,9 @@ importers:
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 4.1.9(@vitest/browser@4.1.9)(vitest@4.1.9)
+      eslint:
+        specifier: ^9.39.0
+        version: 9.39.4(jiti@2.7.0)
       jsdom:
         specifier: 'catalog:'
         version: 29.1.1(@noble/hashes@2.2.0)

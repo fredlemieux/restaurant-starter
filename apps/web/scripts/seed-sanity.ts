@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+/* eslint-disable no-console -- this is a CLI script; console is the point */
 /**
  * Seeds the configured Sanity dataset with the Bar Gaditano fixture
  * content — the same restaurant/menus/press/events that offline mode

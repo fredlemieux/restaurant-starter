@@ -28,7 +28,9 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.2.0",
+    "@restaurant/eslint-config": "workspace:*",
     "@restaurant/tsconfig": "workspace:*",
+    "eslint": "^9.39.0",
     "@storybook/addon-a11y": "^10.4.0",
     "@storybook/addon-docs": "^10.4.0",
     "@storybook/addon-vitest": "^10.4.0",
