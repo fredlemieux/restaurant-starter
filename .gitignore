@@ -14,6 +14,7 @@ storybook-static/
 
 # sanity
 apps/studio/dist/
+apps/studio/.sanity/
 
 # env
 .env
