@@ -1,6 +1,6 @@
 ---
 import Base from '@/layouts/Base.astro';
-import { Hero, OpeningHours, MenuList, Button } from '@restaurant/ui';
+import { Hero, OpeningHours, MenuList } from '@restaurant/ui';
 import { getRestaurant, getPress, getMenus } from '@/lib/queries';
 import { imageUrl } from '@/lib/sanity';
 
@@ -22,11 +22,8 @@ const featuredMenu = menus[0];
     tagline={restaurant?.tagline}
     imageUrl={heroImage}
     imageAlt="Dining room, dim lighting, a single table set for two."
-    cta={(
-      <a href="/contact">
-        <Button size="lg">Reserve a table</Button>
-      </a>
-    )}
+    ctaLabel="Reserve a table"
+    ctaHref="/contact"
   />
 
   {/* About + Hours */}

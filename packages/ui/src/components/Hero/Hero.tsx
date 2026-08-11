@@ -1,24 +1,35 @@
-import type { ReactNode } from 'react';
 import { cn } from '../../lib/cn';
+import { Button } from '../Button/Button';
 
 export interface HeroProps {
   name: string;
   tagline?: string;
   imageUrl?: string;
   imageAlt?: string;
-  cta?: ReactNode;
   eyebrow?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
   align?: 'left' | 'center';
   className?: string;
 }
 
+/**
+ * Full-viewport hero with optional background image and CTA.
+ *
+ * NOTE: CTA is intentionally two primitive props (`ctaLabel` + `ctaHref`)
+ * rather than a `ReactNode`. Passing JSX from an Astro file to a React
+ * component's props doesn't work — Astro's compiler produces an internal
+ * HTMLString object that React's renderer chokes on ("Objects are not valid
+ * as a React child"). Primitives cross the interop boundary cleanly.
+ */
 export function Hero({
   name,
   tagline,
   imageUrl,
   imageAlt,
-  cta,
   eyebrow,
+  ctaLabel,
+  ctaHref,
   align = 'left',
   className,
 }: HeroProps) {
@@ -61,8 +72,12 @@ export function Hero({
             {tagline}
           </p>
         ) : null}
-        {cta ? (
-          <div className={cn('mt-10', align === 'center' && 'flex justify-center')}>{cta}</div>
+        {ctaLabel && ctaHref ? (
+          <div className={cn('mt-10', align === 'center' && 'flex justify-center')}>
+            <a href={ctaHref}>
+              <Button size="lg">{ctaLabel}</Button>
+            </a>
+          </div>
         ) : null}
       </div>
     </section>
