@@ -24,6 +24,13 @@ apps/studio/.sanity/
 .env.local
 .env.*.local
 
+# downloaded media assets — see apps/web/public/media/SOURCES.md
+# (fixtures reference Unsplash CDN URLs directly; local files are optional
+# for full offline mode via a future pnpm media:download script)
+apps/web/public/media/*
+!apps/web/public/media/.gitkeep
+!apps/web/public/media/SOURCES.md
+
 # logs
 *.log
 npm-debug.log*
