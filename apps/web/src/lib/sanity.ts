@@ -26,9 +26,17 @@ function getClient(): SanityClient {
   return cachedClient;
 }
 
+// The Proxy defers `createClient` until first use so a fresh clone
+// can typecheck without SANITY_PROJECT_ID. Function values MUST be
+// bound to the real client — Sanity Client v7 uses ES private class
+// fields (#httpRequest), and those are looked up by instance identity,
+// not by prototype. An unbound method invoked on the Proxy throws
+// "Cannot read private member #httpRequest".
 export const sanity = new Proxy({} as SanityClient, {
-  get(_target, prop, receiver) {
-    return Reflect.get(getClient(), prop, receiver);
+  get(_target, prop) {
+    const client = getClient();
+    const value = Reflect.get(client, prop);
+    return typeof value === 'function' ? value.bind(client) : value;
   },
 });
 
