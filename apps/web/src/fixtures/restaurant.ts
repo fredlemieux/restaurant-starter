@@ -4,6 +4,8 @@ export const restaurant: Restaurant = {
   _id: 'fixture-restaurant',
   name: 'Bar Gaditano',
   tagline: 'Andalusian small plates in the old town.',
+  heroImageUrl:
+    'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=2400&q=80&auto=format&fit=crop',
   address: {
     line1: 'Calle Álamos 12',
     city: 'Málaga',

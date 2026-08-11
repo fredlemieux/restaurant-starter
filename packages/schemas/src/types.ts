@@ -90,6 +90,11 @@ export interface Restaurant {
   name: string;
   tagline?: string;
   heroImage?: { asset: { _ref: string } };
+  /**
+   * Direct image URL — escape hatch for fixture / offline mode where a Sanity
+   * image reference can't be resolved. Takes precedence over `heroImage`.
+   */
+  heroImageUrl?: string;
   about?: PortableTextBlock[];
   address?: Address;
   phone?: string;
