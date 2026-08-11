@@ -1,6 +1,10 @@
 ---
+import { getRestaurant } from '@/lib/queries';
+
+const restaurant = await getRestaurant();
+const restaurantName = restaurant?.name ?? 'Restaurant';
+
 const links = [
-  { href: '/', label: 'Home' },
   { href: '/menus', label: 'Menus' },
   { href: '/story', label: 'Story' },
   { href: '/press', label: 'Press' },
@@ -10,20 +14,36 @@ const links = [
 const path = Astro.url.pathname;
 ---
 
-<header class="absolute inset-x-0 top-0 z-20">
-  <nav class="mx-auto max-w-6xl px-6 py-6 flex items-center justify-between text-white" aria-label="Primary">
-    <a href="/" class="font-display text-2xl">Restaurant</a>
-    <ul class="flex gap-6 text-sm">
-      {links.map((link) => (
-        <li>
-          <a
-            href={link.href}
-            class:list={['transition-opacity hover:opacity-100', path === link.href ? 'opacity-100' : 'opacity-80']}
-          >
-            {link.label}
-          </a>
-        </li>
-      ))}
+<header class="border-ink/10 bg-bone/85 sticky top-0 z-40 border-b backdrop-blur-md">
+  <nav
+    class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-5"
+    aria-label="Primary"
+  >
+    <a href="/" class="font-display text-ink text-2xl tracking-wide">
+      {restaurantName}
+    </a>
+    <ul class="text-ink hidden items-center gap-8 text-xs uppercase tracking-[0.25em] md:flex">
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class:list={[
+                'transition-opacity',
+                path === link.href ? 'opacity-100' : 'opacity-70 hover:opacity-100',
+              ]}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
     </ul>
+    <a
+      href="/contact"
+      class="border-ink text-ink hover:bg-ink hover:text-bone hidden border px-4 py-2 text-xs uppercase tracking-[0.25em] transition-colors md:inline-block"
+    >
+      Reserve
+    </a>
   </nav>
 </header>
