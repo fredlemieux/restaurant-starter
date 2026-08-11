@@ -7,7 +7,7 @@ interface ImportMetaEnv {
   readonly SANITY_DATASET: string;
   readonly SANITY_API_VERSION: string;
   readonly SANITY_READ_TOKEN?: string;
-  readonly SANITY_WEBHOOK_SECRET?: string;
+  readonly SANITY_OFFLINE?: string;
   readonly RESEND_API_KEY?: string;
   readonly CONTACT_TO_ADDRESS?: string;
   readonly CONTACT_FROM_ADDRESS?: string;
