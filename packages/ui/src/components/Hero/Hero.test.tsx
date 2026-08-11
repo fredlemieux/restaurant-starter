@@ -18,8 +18,17 @@ describe('Hero', () => {
     expect(screen.getByAltText('Dining room')).toHaveAttribute('src', 'https://example.com/h.jpg');
   });
 
-  it('renders the CTA slot', () => {
-    render(<Hero name="x" cta={<button>Reserve</button>} />);
-    expect(screen.getByRole('button', { name: 'Reserve' })).toBeInTheDocument();
+  it('renders a CTA link when both ctaLabel and ctaHref are provided', () => {
+    render(<Hero name="x" ctaLabel="Reserve" ctaHref="/contact" />);
+    const link = screen.getByRole('link', { name: 'Reserve' });
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute('href', '/contact');
+  });
+
+  it('renders no CTA when only one of ctaLabel/ctaHref is provided', () => {
+    const { rerender } = render(<Hero name="x" ctaLabel="Reserve" />);
+    expect(screen.queryByRole('link', { name: 'Reserve' })).not.toBeInTheDocument();
+    rerender(<Hero name="x" ctaHref="/contact" />);
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
   });
 });
