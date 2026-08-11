@@ -1,13 +1,15 @@
 ---
 import Base from '@/layouts/Base.astro';
-import { Hero, OpeningHours, Button } from '@restaurant/ui';
-import { getRestaurant, getPress } from '@/lib/queries';
+import { Hero, OpeningHours, MenuList, Button } from '@restaurant/ui';
+import { getRestaurant, getPress, getMenus } from '@/lib/queries';
 import { imageUrl } from '@/lib/sanity';
 
-const restaurant = await getRestaurant();
-const press = await getPress();
+const [restaurant, menus, press] = await Promise.all([getRestaurant(), getMenus(), getPress()]);
 
-const heroImage = restaurant?.heroImage ? imageUrl(restaurant.heroImage) : undefined;
+const heroImage =
+  restaurant?.heroImageUrl ?? (restaurant?.heroImage ? imageUrl(restaurant.heroImage) : undefined);
+
+const featuredMenu = menus[0];
 ---
 
 <Base
@@ -15,35 +17,134 @@ const heroImage = restaurant?.heroImage ? imageUrl(restaurant.heroImage) : undef
   description={restaurant?.seo?.description ?? restaurant?.tagline}
 >
   <Hero
+    eyebrow="Málaga · Est. 2019"
     name={restaurant?.name ?? 'Restaurant'}
     tagline={restaurant?.tagline}
     imageUrl={heroImage}
-    imageAlt=""
-    cta={<a href="/contact"><Button>Reserve a table</Button></a>}
+    imageAlt="Dining room, dim lighting, a single table set for two."
+    cta={(
+      <a href="/contact">
+        <Button size="lg">Reserve a table</Button>
+      </a>
+    )}
   />
 
-  <section class="mx-auto max-w-5xl px-6 py-16 grid gap-12 md:grid-cols-2">
-    {restaurant?.openingHours && <OpeningHours hours={restaurant.openingHours} />}
+  {/* About + Hours */}
+  <section
+    class="mx-auto grid max-w-6xl items-start gap-16 px-6 py-24 md:grid-cols-2 md:gap-24 md:py-32"
+  >
     <div>
-      <h2 class="text-3xl mb-4">About</h2>
-      {restaurant?.tagline && <p class="text-lg mb-4">{restaurant.tagline}</p>}
-      <a href="/story" class="underline">Read our story →</a>
+      <p class="text-clay mb-5 text-xs uppercase tracking-[0.35em]">About</p>
+      <h2 class="font-display mb-8 text-5xl font-light leading-[1.05] md:text-6xl">
+        A short menu of Andalusian small plates.
+      </h2>
+      <p class="text-ink/80 text-lg font-light leading-relaxed">
+        Twenty-two seats, a kitchen the size of a walk-in wardrobe, and whatever the boats brought
+        in that morning at La Merced. We are not a tapas bar in the tourist sense — no free plate
+        with your drink, no chalkboard specials.
+      </p>
+      <a
+        href="/story"
+        class="hover:text-clay mt-8 inline-block border-b border-current pb-1 text-xs uppercase tracking-[0.25em]"
+      >
+        Read our story
+      </a>
     </div>
+    {
+      restaurant?.openingHours && (
+        <div class="border-ink/10 border-t pt-12 md:border-l md:border-t-0 md:pl-12 md:pt-0">
+          <p class="text-clay mb-5 text-xs uppercase tracking-[0.35em]">Visit</p>
+          <OpeningHours hours={restaurant.openingHours} />
+          {restaurant.address && (
+            <address class="text-ink/80 mt-8 space-y-1 text-sm font-light not-italic">
+              <p>{restaurant.address.line1}</p>
+              {restaurant.address.line2 && <p>{restaurant.address.line2}</p>}
+              <p>
+                {restaurant.address.city} · {restaurant.address.postcode}
+              </p>
+              {restaurant.address.mapsUrl && (
+                <a
+                  href={restaurant.address.mapsUrl}
+                  class="hover:text-clay mt-3 inline-block border-b border-current pb-1 text-xs uppercase tracking-[0.25em]"
+                >
+                  Get directions
+                </a>
+              )}
+            </address>
+          )}
+        </div>
+      )
+    }
   </section>
 
-  {press.length > 0 && (
-    <section class="bg-ink/5 py-16">
-      <div class="mx-auto max-w-5xl px-6">
-        <h2 class="text-3xl text-center mb-8">In the press</h2>
-        <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+  {/* Featured menu preview */}
+  {
+    featuredMenu && (
+      <section class="bg-bone-warm py-24 md:py-32">
+        <div class="mx-auto max-w-3xl px-6 text-center">
+          <p class="text-clay mb-5 text-xs uppercase tracking-[0.35em]">Today's menu</p>
+          <h2 class="font-display mb-4 text-5xl font-light leading-[1.05] md:text-6xl">
+            {featuredMenu.title}
+          </h2>
+          {featuredMenu.available && (
+            <p class="text-ink/60 mb-14 text-sm">{featuredMenu.available}</p>
+          )}
+          <div class="text-left">
+            <MenuList menu={featuredMenu} className="!py-0" />
+          </div>
+          {menus.length > 1 && (
+            <a
+              href="/menus"
+              class="hover:text-clay mt-14 inline-block border-b border-current pb-1 text-xs uppercase tracking-[0.25em]"
+            >
+              See all menus
+            </a>
+          )}
+        </div>
+      </section>
+    )
+  }
+
+  {/* Press */}
+  {
+    press.length > 0 && (
+      <section class="mx-auto max-w-6xl px-6 py-24 md:py-32">
+        <div class="mb-16 text-center">
+          <p class="text-clay mb-5 text-xs uppercase tracking-[0.35em]">Press</p>
+          <h2 class="font-display text-4xl font-light md:text-5xl">In the papers.</h2>
+        </div>
+        <ul class="grid gap-12 md:grid-cols-3">
           {press.slice(0, 3).map((p) => (
-            <li class="bg-white rounded-lg p-6 border border-ink/10">
-              <p class="font-display text-xl">“{p.quote}”</p>
-              <p class="mt-3 text-sm text-ink/70">{p.publication}{p.author ? ` · ${p.author}` : ''}</p>
+            <li class="px-4 text-center">
+              <p class="font-display text-2xl font-light italic leading-snug md:text-3xl">
+                &ldquo;{p.quote}&rdquo;
+              </p>
+              <p class="text-ink/60 mt-6 text-xs uppercase tracking-[0.25em]">
+                {p.publication}
+                {p.author ? ` · ${p.author}` : ''}
+              </p>
             </li>
           ))}
         </ul>
-      </div>
-    </section>
-  )}
+      </section>
+    )
+  }
+
+  {/* Reservation CTA */}
+  <section class="bg-deep text-bone relative overflow-hidden py-24 md:py-32">
+    <div class="mx-auto max-w-3xl px-6 text-center">
+      <p class="text-gold mb-5 text-xs uppercase tracking-[0.35em]">Reservations</p>
+      <h2 class="font-display mb-6 text-5xl font-light md:text-6xl">Come and eat with us.</h2>
+      <p class="text-bone/80 mx-auto mb-10 max-w-xl text-lg font-light">
+        Twenty-two seats. Two sittings. If the fridge of Andalusian sherry doesn't keep you, the
+        almadraba tuna probably will.
+      </p>
+      <a
+        href="/contact"
+        class="border-bone text-bone hover:bg-bone hover:text-deep inline-block border px-8 py-4 text-xs uppercase tracking-[0.35em] transition-colors"
+      >
+        Reserve a table
+      </a>
+    </div>
+  </section>
 </Base>
