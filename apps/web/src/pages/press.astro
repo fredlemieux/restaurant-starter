@@ -1,5 +1,6 @@
 ---
 import Base from '@/layouts/Base.astro';
+import PressQuote from '@/components/PressQuote.astro';
 import { getPress } from '@/lib/queries';
 
 const press = await getPress();
@@ -14,32 +15,8 @@ const press = await getPress();
     <ul class="grid gap-16 md:grid-cols-2">
       {
         press.map((p) => (
-          <li class="border-ink/10 border-t pt-12 text-center">
-            <p class="font-display text-3xl font-light italic leading-snug md:text-4xl">
-              &ldquo;{p.quote}&rdquo;
-            </p>
-            <p class="text-ink/60 mt-6 text-xs uppercase tracking-[0.25em]">
-              {p.publication}
-              {p.author ? ` · ${p.author}` : ''}
-            </p>
-            {p.publishedOn && (
-              <p class="text-ink/40 mt-1 text-xs">
-                {new Date(p.publishedOn).toLocaleDateString('en-GB', {
-                  month: 'long',
-                  year: 'numeric',
-                })}
-              </p>
-            )}
-            {p.url && (
-              <a
-                href={p.url}
-                target="_blank"
-                rel="noreferrer noopener"
-                class="hover:text-clay mt-6 inline-block border-b border-current pb-1 text-xs uppercase tracking-[0.25em]"
-              >
-                Read article
-              </a>
-            )}
+          <li>
+            <PressQuote item={p} detail />
           </li>
         ))
       }
