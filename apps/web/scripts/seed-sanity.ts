@@ -17,10 +17,10 @@
  *
  * Note: heroImage is not seeded — that's a Sanity image reference which
  * requires an asset upload flow. Upload one via the Studio Media Library
- * after seeding, or extend this script with client.assets.upload().
+ * after seeding, or extend `stageRestaurant` with client.assets.upload().
  */
 
-import { createClient } from '@sanity/client';
+import { createClient, type Transaction } from '@sanity/client';
 import { restaurant, menus, events, press } from '../src/fixtures';
 
 const projectId = process.env.SANITY_PROJECT_ID;
@@ -56,25 +56,24 @@ function sanitySlug(current: string) {
   return { _type: 'slug' as const, current };
 }
 
-async function seed(): Promise<void> {
-  const tx = client.transaction();
+function stageRestaurant(tx: Transaction): void {
+  const { _id: _rid, heroImageUrl: _hero, ...rest } = restaurant;
+  tx.createOrReplace({ _id: 'restaurant-main', _type: 'restaurant', ...rest });
+}
 
-  // Restaurant (singleton, stable ID)
-  const { _id: _rid, heroImageUrl: _hero, ...restaurantRest } = restaurant;
-  tx.createOrReplace({ _id: 'restaurant-main', _type: 'restaurant', ...restaurantRest });
-
-  // Menus — key by slug so re-runs update rather than duplicate
+function stageMenus(tx: Transaction): void {
   for (const menu of menus) {
-    const { _id: _mid, slug, ...menuRest } = menu;
+    const { _id: _mid, slug, ...rest } = menu;
     tx.createOrReplace({
       _id: `menu-${slug.current}`,
       _type: 'menu',
-      ...menuRest,
+      ...rest,
       slug: sanitySlug(slug.current),
     });
   }
+}
 
-  // Press mentions
+function stagePress(tx: Transaction): void {
   for (const p of press) {
     const { _id: _pid, ...rest } = p;
     tx.createOrReplace({
@@ -83,8 +82,9 @@ async function seed(): Promise<void> {
       ...rest,
     });
   }
+}
 
-  // Events
+function stageEvents(tx: Transaction): void {
   for (const e of events) {
     const { _id: _eid, slug, ...rest } = e;
     const id = slug?.current ?? slugify(e.title);
@@ -95,10 +95,10 @@ async function seed(): Promise<void> {
       ...(slug ? { slug: sanitySlug(slug.current) } : {}),
     });
   }
+}
 
-  console.log(`Seeding → ${projectId}/${dataset}`);
-  const result = await tx.commit();
-  console.log(`  ${result.results.length} documents written`);
+function logSuccess(count: number): void {
+  console.log(`  ${count} documents written`);
   console.log(`    restaurant   restaurant-main`);
   console.log(`    menus        ${menus.length}`);
   console.log(`    press        ${press.length}`);
@@ -108,6 +108,18 @@ async function seed(): Promise<void> {
   console.log(`  1. Studio:    pnpm --filter @restaurant/studio dev  →  http://localhost:3333`);
   console.log(`  2. Roundtrip: set SANITY_OFFLINE=0 in apps/web/.env, then pnpm dev`);
   console.log(`  3. Hero image: upload one via Studio → Media Library`);
+}
+
+async function seed(): Promise<void> {
+  const tx = client.transaction();
+  stageRestaurant(tx);
+  stageMenus(tx);
+  stagePress(tx);
+  stageEvents(tx);
+
+  console.log(`Seeding → ${projectId}/${dataset}`);
+  const result = await tx.commit();
+  logSuccess(result.results.length);
 }
 
 seed().catch((err: unknown) => {
