@@ -11,7 +11,9 @@ const site = process.env.PUBLIC_SITE_URL ?? 'http://localhost:4321';
 // `process.stderr.write`. We only need the adapter for `astro build` +
 // `astro preview`, so skip it during `astro dev` unless USE_CLOUDFLARE_DEV=1
 // is set to opt into miniflare parity locally.
-const isDev = process.argv.includes('dev');
+// Check argv[2] exactly (the subcommand slot) — `argv.includes('dev')` would
+// also match `astro build --devtools` or any flag literal containing "dev".
+const isDev = process.argv[2] === 'dev';
 const useAdapter = !isDev || process.env.USE_CLOUDFLARE_DEV === '1';
 
 export default defineConfig({
