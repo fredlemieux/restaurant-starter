@@ -1,6 +1,7 @@
 ---
 import Base from '@/layouts/Base.astro';
 import { Hero, OpeningHours, MenuList } from '@restaurant/ui';
+import PressQuote from '@/components/PressQuote.astro';
 import { getRestaurant, getPress, getMenus } from '@/lib/queries';
 import { imageUrl } from '@/lib/sanity';
 
@@ -80,12 +81,6 @@ const featuredMenu = menus[0];
       <section class="bg-bone-warm py-24 md:py-32">
         <div class="mx-auto max-w-3xl px-6 text-center">
           <p class="text-clay mb-5 text-xs uppercase tracking-[0.35em]">Today's menu</p>
-          <h2 class="font-display mb-4 text-5xl font-light leading-[1.05] md:text-6xl">
-            {featuredMenu.title}
-          </h2>
-          {featuredMenu.available && (
-            <p class="text-ink/60 mb-14 text-sm">{featuredMenu.available}</p>
-          )}
           <div class="text-left">
             <MenuList menu={featuredMenu} className="!py-0" />
           </div>
@@ -112,14 +107,8 @@ const featuredMenu = menus[0];
         </div>
         <ul class="grid gap-12 md:grid-cols-3">
           {press.slice(0, 3).map((p) => (
-            <li class="px-4 text-center">
-              <p class="font-display text-2xl font-light italic leading-snug md:text-3xl">
-                &ldquo;{p.quote}&rdquo;
-              </p>
-              <p class="text-ink/60 mt-6 text-xs uppercase tracking-[0.25em]">
-                {p.publication}
-                {p.author ? ` · ${p.author}` : ''}
-              </p>
+            <li>
+              <PressQuote item={p} />
             </li>
           ))}
         </ul>
