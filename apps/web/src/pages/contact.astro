@@ -7,7 +7,11 @@ const restaurant = await getRestaurant();
 // Normalise empty-string env var to `undefined` so server + client render
 // the same markup (an empty prop that only exists during hydration breaks
 // React's checksum with "Expected server HTML to contain a matching…").
-const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || undefined;
+// Explicit === '' rather than `||` — falsy strings like "0" are unlikely
+// site-key values but the intent-preserving check reads better.
+const rawTurnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+const turnstileKey =
+  rawTurnstileKey === '' || rawTurnstileKey == null ? undefined : rawTurnstileKey;
 ---
 
 <Base title="Contact" description="Get in touch">
