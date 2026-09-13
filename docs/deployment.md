@@ -167,7 +167,6 @@ The CI/CD workflows expect:
 | `SANITY_GITHUB_DISPATCH_PAT` | GitHub PAT with `repo` scope — auth for Sanity's webhook POST to `github.com/repos/<owner>/<repo>/dispatches`. Set in Sanity → API → Webhooks → Authorization header (not in GitHub secrets). |
 | `RESEND_API_KEY` | Resend dash |
 | `PUBLIC_SITE_URL` | e.g. `https://example.com` |
-| `CHROMATIC_PROJECT_TOKEN` | Optional — Chromatic for Storybook visual diffs |
 
 ## Day two
 
