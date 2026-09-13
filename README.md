@@ -1,6 +1,6 @@
 # restaurant-starter
 
-Open-source scaffold for small-restaurant websites — a direct alternative to the WordPress + Elementor + LiteSpeed agency stack that produces fragile, cache-bound, £60K-quoted brochure sites.
+Open-source scaffold for small-restaurant websites — a modern alternative to the typical WordPress + page-builder agency stack, built around static-first rendering, a headless CMS, and atomic deploys.
 
 > A restaurant site is ~95% static content + ~5% editable bits (menu, hours, what's-on). This repo solves both correctly, then deploys atomically with no cache to fight.
 
@@ -20,15 +20,15 @@ Open-source scaffold for small-restaurant websites — a direct alternative to t
 | Visual regression | **Playwright** `toHaveScreenshot()` baselines committed per route |
 | Offline / demo mode | **Fixture layer** — `SANITY_OFFLINE=1` renders the entire site with zero network |
 
-## Why not WordPress?
+## Why static + headless?
 
-The two reference sites this repo was designed against ([jamavarrestaurants.com](https://jamavarrestaurants.com/), [mimimeifair.com](https://mimimeifair.com/)) both run an identical stack: WP 7.0 + Hub theme + Elementor Pro + LiteSpeed Cache + Fluent Forms. Same agency, billed as bespoke. Their developer struggles because:
+The common stack for small-restaurant sites is WordPress + a page-builder (Elementor / Divi / WPBakery) + a caching plugin (LiteSpeed / WP Rocket) + a forms plugin. It works, but it tends to lock in a few structural problems for anyone who inherits the site later:
 
-- **Three caching layers** (LiteSpeed page + object + CSS-combine, then Cloudflare, then browser) with no atomic deploy boundary.
-- **Content lives in opaque DB blobs** (Elementor JSON, Redux serialised PHP) — the fix surface for an outside dev is essentially closed.
-- **Editing happens in production** with no preview, no rollback, no version control.
+- **Multiple overlapping caching layers** (page + object + CSS-combine, then a CDN, then browser) with no atomic deploy boundary.
+- **Content lives in opaque database blobs** (page-builder JSON, serialised PHP) — the surface for an outside developer to make surgical edits is essentially closed.
+- **Editing happens directly in production** with no preview, no rollback, no version control on the content itself.
 
-This repo solves it by putting content in either Git (devs) or Sanity (restaurant staff), building static output, and deploying atomically. Cache invalidation becomes a non-issue.
+This repo takes the other route: content lives in either Git (developers) or Sanity (restaurant staff), the site builds to static output, and each deploy is atomic. Cache invalidation stops being something to worry about.
 
 ---
 
@@ -77,12 +77,45 @@ Connect real services when you're ready — see the two sections below.
 
 ## Connecting Resend + Turnstile (optional, ~3 minutes)
 
-Only needed for the contact form to actually send email + block spam.
+Only needed for the contact form to actually send email + block spam. Leave both blank and the contact form silently skips the challenge — fine for pure local development.
 
-- **Resend** — [resend.com](https://resend.com) → API Keys → Create → "Sending access" → paste as `RESEND_API_KEY` in `apps/web/.env`. Verify a domain at [resend.com/domains](https://resend.com/domains) then update `CONTACT_FROM_ADDRESS`.
-- **Turnstile** — [dash.cloudflare.com](https://dash.cloudflare.com) → Turnstile → Add site → paste site key as `PUBLIC_TURNSTILE_SITE_KEY` and secret as `TURNSTILE_SECRET_KEY` in `apps/web/.env`.
+### Cloudflare Turnstile
 
-Leave both blank and the contact form silently skips the challenge — fine for local development.
+Turnstile is a privacy-respecting CAPTCHA alternative. The scaffold's contact form uses it to gate submissions.
+
+**Local dev — Cloudflare test keys (no account needed)**
+
+Cloudflare publishes public test keys that always pass, always fail, or always challenge. The scaffold's `apps/web/.env.example` **defaults to the always-challenge pair** so a fresh `pnpm run setup:env` boots with the interactive widget visible — you see Turnstile actually rendering without registering anything.
+
+- `1x…AA` pair — **always passes** (silent, no interaction)
+- `2x…AB` / `2x…AA` pair — always fails (test the rejection path)
+- `3x…FF` / `3x…AA` pair — **always challenges** (interactive widget — the default in `.env.example`)
+
+Swap in a different pair to test rejection / silent-pass paths. Full reference: [developers.cloudflare.com/turnstile/troubleshooting/testing](https://developers.cloudflare.com/turnstile/troubleshooting/testing/).
+
+**Prod — real Turnstile site (~2 minutes)**
+
+1. [dash.cloudflare.com](https://dash.cloudflare.com) → **Turnstile** (left sidebar) → **Add site**
+2. Site name: `restaurant-<slug>` (or whatever fits your project naming)
+3. **Hostnames:** add all of `localhost`, `127.0.0.1`, and your production domain (comma-separated)
+4. **Widget mode:** Managed (recommended default)
+5. **Pre-clearance:** No
+6. Save, then copy the **site key** and **secret key** from the widget detail page
+7. Paste into `apps/web/.env`:
+
+   ```env
+   PUBLIC_TURNSTILE_SITE_KEY=0x4AAAAAAAAAAAAAAAAAAAAA
+   TURNSTILE_SECRET_KEY=0x4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+   ```
+
+Restart the dev server after any `.env` change — Vite only reads env at boot.
+
+### Resend
+
+- Sign up at [resend.com](https://resend.com) → **API Keys** → **Create** → "Sending access"
+- Paste the `re_…` value as `RESEND_API_KEY` in `apps/web/.env`
+- Verify a sender domain at [resend.com/domains](https://resend.com/domains), then set `CONTACT_FROM_ADDRESS` to a `you@your-verified-domain` address
+- For pure local dev with no email actually sent, leave the key blank — the API route logs the payload instead
 
 ---
 
