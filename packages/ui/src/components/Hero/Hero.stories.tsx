@@ -13,9 +13,9 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    eyebrow: 'Mount Street · Est. 2017',
-    name: 'Jamavar',
-    tagline: 'A celebration of regional Indian cooking on Mount Street.',
+    eyebrow: 'Corner of Fifth · Est. 2017',
+    name: 'Sable',
+    tagline: 'A neighbourhood dining room with a short, regional menu.',
     imageUrl:
       'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=2000&q=80&auto=format&fit=crop',
     imageAlt: 'A dimly-lit dining room with warm lighting',
@@ -27,8 +27,8 @@ export const Default: Story = {
 export const NoImage: Story = {
   args: {
     eyebrow: 'Coming Soon',
-    name: 'Mimi Mei Fair',
-    tagline: 'Modern Chinese in Mayfair.',
+    name: 'The Larder',
+    tagline: 'A wine bar and small kitchen opening this autumn.',
     ctaLabel: 'Join the waitlist',
     ctaHref: '#',
   },

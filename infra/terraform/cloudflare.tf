@@ -22,7 +22,7 @@ resource "cloudflare_pages_project" "web" {
 
   build_config = {
     build_command   = "pnpm --filter @restaurant/web build"
-    destination_dir = "apps/web/dist"
+    destination_dir = "apps/web/dist/client"
     root_dir        = ""
   }
 

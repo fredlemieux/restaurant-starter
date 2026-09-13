@@ -19,26 +19,25 @@ jobs:
       SANITY_READ_TOKEN: ${{ secrets.SANITY_READ_TOKEN }}
       PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with: { version: 10 }
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v5
+      - uses: actions/setup-node@v5
         with: { node-version: 24, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @restaurant/web build
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy apps/web/dist --project-name=${{ secrets.CLOUDFLARE_PAGES_PROJECT }} --branch=main
+          command: pages deploy apps/web/dist/client --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }} --branch=main
 
   lighthouse:
     name: Lighthouse budget
     needs: deploy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |

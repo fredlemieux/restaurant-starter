@@ -17,18 +17,30 @@ jobs:
       SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID }}
       SANITY_DATASET: ${{ secrets.SANITY_DATASET }}
       SANITY_READ_TOKEN: ${{ secrets.SANITY_READ_TOKEN }}
-      PUBLIC_SITE_URL: https://${{ github.event.pull_request.head.ref }}.${{ secrets.CLOUDFLARE_PAGES_PROJECT }}.pages.dev
+      # Canonical URL always points at production even from preview builds — the
+      # standard SEO pattern (search engines shouldn't index preview URLs as
+      # canonical). Computing the actual preview URL is brittle anyway: branch
+      # names with `/` (e.g. `ai/scrub-demo-copy`) get slug-transformed and CF
+      # appends a numeric suffix to project subdomains for collision-avoidance
+      # (`my-restaurant` → `my-restaurant-571.pages.dev`).
+      PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with: { version: 10 }
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v5
+      - uses: actions/setup-node@v5
         with: { node-version: 24, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @restaurant/web build
+      # CF Pages reports the branch alias URL as `ai-scrub-demo-copy.<subdomain>`
+      # when given `--branch=ai/scrub-demo-copy`, but the actual DNS routing
+      # never gets registered — the alias 404s. Slugify the branch (`/` → `-`)
+      # before passing so CF creates the alias correctly.
+      - name: Slugify branch for CF Pages
+        id: branch
+        run: echo "slug=${GITHUB_HEAD_REF//\//-}" >> "$GITHUB_OUTPUT"
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy apps/web/dist --project-name=${{ secrets.CLOUDFLARE_PAGES_PROJECT }} --branch=${{ github.event.pull_request.head.ref }}
+          command: pages deploy apps/web/dist/client --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }} --branch=${{ steps.branch.outputs.slug }}

@@ -300,10 +300,7 @@ function Field({
         onBlur={onBlur}
         aria-invalid={error ? true : undefined}
         aria-describedby={errorId}
-        className={cn(
-          'rounded-md border px-3 py-2',
-          error ? 'border-red-600' : 'border-ink/20',
-        )}
+        className={cn('rounded-md border px-3 py-2', error ? 'border-red-600' : 'border-ink/20')}
       />
       {error ? (
         <span id={errorId} role="alert" className="text-xs text-red-700">
@@ -341,10 +338,7 @@ function TextArea({ name, label, required, value, error, onChange, onBlur }: Tex
         onBlur={onBlur}
         aria-invalid={error ? true : undefined}
         aria-describedby={errorId}
-        className={cn(
-          'rounded-md border px-3 py-2',
-          error ? 'border-red-600' : 'border-ink/20',
-        )}
+        className={cn('rounded-md border px-3 py-2', error ? 'border-red-600' : 'border-ink/20')}
       />
       {error ? (
         <span id={errorId} role="alert" className="text-xs text-red-700">
