@@ -30,6 +30,8 @@ The common stack for small-restaurant sites is WordPress + a page-builder (Eleme
 
 This repo takes the other route: content lives in either Git (developers) or Sanity (restaurant staff), the site builds to static output, and each deploy is atomic. Cache invalidation stops being something to worry about.
 
+> **Deployment model — revisit later.** Current mode is pure SSG (`output: 'static'` in `astro.config.mjs`). A Sanity content edit does not appear until a rebuild fires. The chain today: Sanity webhook → GitHub `repository_dispatch` (auth: PAT, not a shared secret) → `content-webhook.yml` builds + uploads via wrangler. Two things worth revisiting: (a) whether some routes should switch to SSR / ISR for faster content freshness, and (b) whether to add a direct HMAC-verified `apps/web/src/pages/api/webhooks/sanity.ts` endpoint so Sanity can trigger rebuilds without GitHub on the critical path. Not urgent until content edit → live latency actually becomes a problem for a client.
+
 ---
 
 ## Quick start (2 minutes, zero external services)

@@ -11,6 +11,8 @@
 #        - Method: POST
 #        - Headers: Authorization=Bearer <PAT>, Accept=application/vnd.github+json
 #        - Body: {"event_type":"sanity-content-changed"}
-#        - HTTP secret: matches SANITY_WEBHOOK_SECRET in the Pages env
+#        - (The webhook signing secret field can be left blank — GitHub validates the PAT,
+#          not a shared secret. See README "Deployment model — revisit" for a future
+#          direct-endpoint alternative that would use one.)
 #
 # Once a community provider matures (or Sanity ships an official one), wire those steps in here.
