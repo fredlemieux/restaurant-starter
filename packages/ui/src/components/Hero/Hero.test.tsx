@@ -4,13 +4,13 @@ import { Hero } from './Hero';
 
 describe('Hero', () => {
   it('renders the restaurant name as an h1', () => {
-    render(<Hero name="Jamavar" />);
-    expect(screen.getByRole('heading', { level: 1, name: 'Jamavar' })).toBeInTheDocument();
+    render(<Hero name="Bar Gaditano" />);
+    expect(screen.getByRole('heading', { level: 1, name: 'Bar Gaditano' })).toBeInTheDocument();
   });
 
   it('renders the tagline when provided', () => {
-    render(<Hero name="Jamavar" tagline="Regional Indian cooking." />);
-    expect(screen.getByText('Regional Indian cooking.')).toBeInTheDocument();
+    render(<Hero name="Bar Gaditano" tagline="Andalusian small plates." />);
+    expect(screen.getByText('Andalusian small plates.')).toBeInTheDocument();
   });
 
   it('renders the hero image with given alt text', () => {
