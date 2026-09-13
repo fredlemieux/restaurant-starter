@@ -17,7 +17,13 @@ jobs:
       SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID }}
       SANITY_DATASET: ${{ secrets.SANITY_DATASET }}
       SANITY_READ_TOKEN: ${{ secrets.SANITY_READ_TOKEN }}
-      PUBLIC_SITE_URL: https://${{ github.event.pull_request.head.ref }}.${{ vars.CLOUDFLARE_PAGES_PROJECT }}.pages.dev
+      # Canonical URL always points at production even from preview builds — the
+      # standard SEO pattern (search engines shouldn't index preview URLs as
+      # canonical). Computing the actual preview URL is brittle anyway: branch
+      # names with `/` (e.g. `ai/scrub-demo-copy`) get slug-transformed and CF
+      # appends a numeric suffix to project subdomains for collision-avoidance
+      # (`my-restaurant` → `my-restaurant-571.pages.dev`).
+      PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL }}
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v5
