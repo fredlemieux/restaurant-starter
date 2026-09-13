@@ -1,8 +1,15 @@
 project_name          = "my-restaurant"
-domain                = "example.com"
-zone_name             = "example.com"
 cloudflare_account_id = "your-cf-account-id"
 github_repo           = "your-org/restaurant-starter"
+
+# Domain toggle:
+#   false → site served from <project_name>.pages.dev only (free, instant, no zone needed)
+#   true  → attach a custom apex + www; requires the zone to already exist in this Cloudflare account
+enable_custom_domain = false
+
+# Only used when enable_custom_domain = true:
+# domain    = "example.com"
+# zone_name = "example.com"
 
 # Set with: TF_VAR_cloudflare_api_token=... terraform apply
 # or in your secret store. Do NOT commit.

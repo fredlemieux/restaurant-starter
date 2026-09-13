@@ -3,14 +3,22 @@ variable "project_name" {
   type        = string
 }
 
+variable "enable_custom_domain" {
+  description = "Attach a custom apex + www to the Pages project. When false, the site is served from <project_name>.pages.dev only and no zone/DNS resources are created."
+  type        = bool
+  default     = false
+}
+
 variable "domain" {
-  description = "Apex domain the site is served from (e.g. example.com)."
+  description = "Apex domain the site is served from (e.g. example.com). Only required when enable_custom_domain = true."
   type        = string
+  default     = null
 }
 
 variable "zone_name" {
-  description = "Cloudflare DNS zone that owns the domain. Usually equal to `domain`."
+  description = "Cloudflare DNS zone that owns the domain. Usually equal to `domain`. Only required when enable_custom_domain = true."
   type        = string
+  default     = null
 }
 
 variable "cloudflare_api_token" {

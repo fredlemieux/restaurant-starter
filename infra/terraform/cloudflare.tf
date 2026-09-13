@@ -1,4 +1,5 @@
 data "cloudflare_zone" "site" {
+  count  = var.enable_custom_domain ? 1 : 0
   filter = { name = local.zone_name }
 }
 
@@ -10,13 +11,12 @@ resource "cloudflare_pages_project" "web" {
   source = {
     type = "github"
     config = {
-      owner                         = split("/", var.github_repo)[0]
-      repo_name                     = split("/", var.github_repo)[1]
-      production_branch             = var.production_branch
-      pr_comments_enabled           = true
-      deployments_enabled           = true
-      production_deployment_enabled = true
-      preview_deployment_setting    = "all"
+      owner                          = split("/", var.github_repo)[0]
+      repo_name                      = split("/", var.github_repo)[1]
+      production_branch              = var.production_branch
+      pr_comments_enabled            = true
+      production_deployments_enabled = true
+      preview_deployment_setting     = "all"
     }
   }
 
@@ -41,19 +41,22 @@ resource "cloudflare_pages_project" "web" {
 }
 
 resource "cloudflare_pages_domain" "apex" {
+  count        = var.enable_custom_domain ? 1 : 0
   account_id   = var.cloudflare_account_id
   project_name = cloudflare_pages_project.web.name
   name         = local.domain
 }
 
 resource "cloudflare_pages_domain" "www" {
+  count        = var.enable_custom_domain ? 1 : 0
   account_id   = var.cloudflare_account_id
   project_name = cloudflare_pages_project.web.name
   name         = "www.${local.domain}"
 }
 
 resource "cloudflare_dns_record" "apex" {
-  zone_id = data.cloudflare_zone.site.zone_id
+  count   = var.enable_custom_domain ? 1 : 0
+  zone_id = data.cloudflare_zone.site[0].zone_id
   name    = local.domain
   type    = "CNAME"
   content = "${cloudflare_pages_project.web.name}.pages.dev"
@@ -62,7 +65,8 @@ resource "cloudflare_dns_record" "apex" {
 }
 
 resource "cloudflare_dns_record" "www" {
-  zone_id = data.cloudflare_zone.site.zone_id
+  count   = var.enable_custom_domain ? 1 : 0
+  zone_id = data.cloudflare_zone.site[0].zone_id
   name    = "www"
   type    = "CNAME"
   content = "${cloudflare_pages_project.web.name}.pages.dev"
@@ -73,7 +77,10 @@ resource "cloudflare_dns_record" "www" {
 resource "cloudflare_turnstile_widget" "contact" {
   account_id = var.cloudflare_account_id
   name       = "${local.project_name}-contact-form"
-  domains    = [local.domain, "www.${local.domain}"]
-  mode       = "managed"
-  region     = "world"
+  domains = var.enable_custom_domain ? [local.domain, "www.${local.domain}"] : [
+    cloudflare_pages_project.web.subdomain,
+    "localhost",
+  ]
+  mode   = "managed"
+  region = "world"
 }
