@@ -17,7 +17,7 @@ jobs:
       SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID }}
       SANITY_DATASET: ${{ secrets.SANITY_DATASET }}
       SANITY_READ_TOKEN: ${{ secrets.SANITY_READ_TOKEN }}
-      PUBLIC_SITE_URL: https://${{ github.event.pull_request.head.ref }}.${{ secrets.CLOUDFLARE_PAGES_PROJECT }}.pages.dev
+      PUBLIC_SITE_URL: https://${{ github.event.pull_request.head.ref }}.${{ vars.CLOUDFLARE_PAGES_PROJECT }}.pages.dev
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v5
@@ -30,4 +30,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy apps/web/dist --project-name=${{ secrets.CLOUDFLARE_PAGES_PROJECT }} --branch=${{ github.event.pull_request.head.ref }}
+          command: pages deploy apps/web/dist --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }} --branch=${{ github.event.pull_request.head.ref }}
