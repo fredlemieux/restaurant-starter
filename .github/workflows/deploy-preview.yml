@@ -31,9 +31,16 @@ jobs:
         with: { node-version: 24, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @restaurant/web build
+      # CF Pages reports the branch alias URL as `ai-scrub-demo-copy.<subdomain>`
+      # when given `--branch=ai/scrub-demo-copy`, but the actual DNS routing
+      # never gets registered — the alias 404s. Slugify the branch (`/` → `-`)
+      # before passing so CF creates the alias correctly.
+      - name: Slugify branch for CF Pages
+        id: branch
+        run: echo "slug=${GITHUB_HEAD_REF//\//-}" >> "$GITHUB_OUTPUT"
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy apps/web/dist/client --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }} --branch=${{ github.event.pull_request.head.ref }}
+          command: pages deploy apps/web/dist/client --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }} --branch=${{ steps.branch.outputs.slug }}
