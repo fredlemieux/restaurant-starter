@@ -15,7 +15,7 @@
    └─────────────────┘         └────────────────┘
 ```
 
-- `packages/ui` is **pure presentation**: every component takes plain props, has a Storybook story, has a Vitest+RTL test. It must never import from `@sanity/client`. This is what makes Chromatic snapshots stable and Storybook-driven development work.
+- `packages/ui` is **pure presentation**: every component takes plain props, has a Storybook story, has a Vitest+RTL test. It must never import from `@sanity/client`. This is what makes Storybook-driven development and Playwright visual regression stable.
 - `packages/schemas` is the **single source of truth** for content shape. Both Studio and the web app import from it.
 - `apps/web` is the **composition root** — it fetches via Sanity, transforms to props, and hands off to UI. The only place network code lives.
 - `apps/studio` is a thin shell — Studio config + structure + the shared schemas.
