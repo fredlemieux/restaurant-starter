@@ -5,6 +5,7 @@ Open-source scaffold for small-restaurant websites — a modern alternative to t
 **🔗 Live demo:** [my-restaurant-571.pages.dev](https://my-restaurant-571.pages.dev) — the Bar Gaditano fixture running on Cloudflare Pages, editable from a hosted Sanity Studio.
 
 [![Live demo](https://img.shields.io/badge/Live%20demo-my--restaurant--571.pages.dev-1a73e8?style=flat-square&logo=cloudflare&logoColor=white)](https://my-restaurant-571.pages.dev)
+
 [![Buy me a beer](https://img.shields.io/badge/Buy%20me%20a%20beer-%F0%9F%8D%BA-00457C?style=flat-square&logo=paypal&logoColor=white)](https://paypal.me/frederiquelemieux1)
 
 > A restaurant site is ~95% static content + ~5% editable bits (menu, hours, what's-on). This repo solves both correctly, then deploys atomically with no cache to fight.
