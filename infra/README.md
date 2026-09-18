@@ -11,7 +11,7 @@ Provisions everything that lives in Cloudflare:
 | `cloudflare_dns_record.apex` / `.www` | CNAMEs to `<project>.pages.dev` (proxied) |
 | `cloudflare_turnstile_widget.contact` | Anti-spam token used on the contact form |
 
-Sanity is **not** provisioned here — see `sanity.tf` for the one-time manual steps (no official Terraform provider exists at time of writing).
+Sanity is **not** provisioned here — see [`docs/sanity.md`](../docs/sanity.md) for the one-time manual steps (no official Terraform provider exists at time of writing).
 
 ## Apply order
 
@@ -20,7 +20,7 @@ Sanity is **not** provisioned here — see `sanity.tf` for the one-time manual s
 3. Copy `terraform.tfvars.example` to `terraform.tfvars`, fill in values.
 4. Export the API token: `export TF_VAR_cloudflare_api_token=...`
 5. `terraform init && terraform plan && terraform apply`
-6. Push the Sanity webhook config (see `sanity.tf`).
+6. Push the Sanity webhook config (see [`docs/sanity.md`](../docs/sanity.md)).
 
 ## Docker Compose (local dev)
 

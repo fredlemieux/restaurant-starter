@@ -2,6 +2,8 @@
 
 Open-source scaffold for small-restaurant websites — a modern alternative to the typical WordPress + page-builder agency stack, built around static-first rendering, a headless CMS, and atomic deploys.
 
+[![Buy me a beer](https://img.shields.io/badge/Buy%20me%20a%20beer-%F0%9F%8D%BA-00457C?style=flat-square&logo=paypal&logoColor=white)](https://paypal.me/frederiquelemieux1)
+
 > A restaurant site is ~95% static content + ~5% editable bits (menu, hours, what's-on). This repo solves both correctly, then deploys atomically with no cache to fight.
 
 ## What you get
@@ -31,6 +33,25 @@ The common stack for small-restaurant sites is WordPress + a page-builder (Eleme
 This repo takes the other route: content lives in either Git (developers) or Sanity (restaurant staff), the site builds to static output, and each deploy is atomic. Cache invalidation stops being something to worry about.
 
 > **Deployment model — revisit later.** Current mode is pure SSG (`output: 'static'` in `astro.config.mjs`). A Sanity content edit does not appear until a rebuild fires. The chain today: Sanity webhook → GitHub `repository_dispatch` (auth: PAT, not a shared secret) → `content-webhook.yml` builds + uploads via wrangler. Two things worth revisiting: (a) whether some routes should switch to SSR / ISR for faster content freshness, and (b) whether to add a direct HMAC-verified `apps/web/src/pages/api/webhooks/sanity.ts` endpoint so Sanity can trigger rebuilds without GitHub on the critical path. Not urgent until content edit → live latency actually becomes a problem for a client.
+
+## Running costs
+
+Approximate monthly cost for a small restaurant site (own domain, low-to-moderate traffic, 1–3 editors). Prices in GBP; convert as needed.
+
+| Item | Cost | Notes |
+|---|---|---|
+| Custom domain | **~£10/yr** | Registrar fee. Cloudflare Registrar sells at-cost. |
+| Cloudflare Pages hosting | **£0/mo** | Free tier: unlimited requests + bandwidth, 500 builds/month. |
+| Sanity (CMS) | **£0/mo** | Free tier: 3 users, 500k API CDN requests/mo, 10GB assets, 2 datasets. Jumps to **~£80/mo** (Growth, $99) if you exceed request limits or need more editors. |
+| Cloudflare Turnstile (anti-spam) | **£0** | Free, no cap. |
+| Resend (contact-form email) | **£0/mo** | Free tier: 3,000 emails/month, 100/day. Pro ~£16/mo ($20) for 50k. |
+| OpenTable widget | **£0** | Free to embed — OpenTable monetises on the booking side. |
+| GitHub Actions (CI/CD) | **£0** | Unlimited minutes on a public repo. Private repo: 2,000 min/mo free. |
+| Sanity Studio hosting | **£0** | `<slug>.sanity.studio` subdomain included. Custom Studio domain needs a paid Sanity plan. |
+
+**Realistic total for a small restaurant on defaults: ~£10/year** (just the domain — everything else fits inside free tiers).
+
+**When costs grow:** the first bill you're likely to see is Sanity Growth (~£80/mo) if you add more than 3 editors or your site becomes popular enough to blow past the 500k CDN request cap. Turnstile, Pages, and Actions will realistically stay at £0 even at meaningful scale.
 
 ---
 
