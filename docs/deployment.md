@@ -52,7 +52,10 @@ No API token needed for this path — Cloudflare uses your dashboard session.
 Then in [manage.sanity.io](https://manage.sanity.io) → your project:
 - **API → CORS origins** — add `https://<your-domain>` and `https://*.<your-pages-project>.pages.dev` (Pages preview URLs), both with credentials enabled.
 - **API → Tokens** — create a read token; save as `SANITY_READ_TOKEN`.
-- **API → Webhooks** — add a webhook on `mutation` events pointing at the GitHub `repository_dispatch` endpoint (see `infra/terraform/sanity.tf` for the exact body).
+- **API → Webhooks** — add a webhook on `mutation` events pointing at the GitHub `repository_dispatch` endpoint. Full setup steps + the exact header/body values in [`docs/sanity.md`](./sanity.md). Three things that trip everyone up:
+  - The `Authorization` header value **must** start with `Bearer ` (literally the word `Bearer`, a space, then the token). Omit the prefix and GitHub returns `401 Requires authentication`.
+  - If you're using a fine-grained PAT (recommended), it needs the **Contents: Read and write** repository permission. The classic-PAT `repo` scope is not the same thing; without Contents write you'll get `403 Resource not accessible by personal access token`.
+  - You **must** set the webhook's **HTTP body** (or **Projection**, depending on UI) to a static `{"event_type": "sanity-content-changed"}`. Sanity's default payload is the changed document, which GitHub rejects with `422 Invalid request` (document fields "are not permitted keys" + `event_type` missing).
 
 ### 2. Cloudflare
 
@@ -164,7 +167,7 @@ The CI/CD workflows expect:
 | `SANITY_PROJECT_ID` | Sanity dashboard |
 | `SANITY_DATASET` | usually `production` |
 | `SANITY_READ_TOKEN` | Sanity → API → Tokens |
-| `SANITY_GITHUB_DISPATCH_PAT` | GitHub PAT with `repo` scope — auth for Sanity's webhook POST to `github.com/repos/<owner>/<repo>/dispatches`. Set in Sanity → API → Webhooks → Authorization header (not in GitHub secrets). |
+| `SANITY_GITHUB_DISPATCH_PAT` | GitHub fine-grained PAT scoped to this repo with **Contents: Read and write** — auth for Sanity's webhook POST to `github.com/repos/<owner>/<repo>/dispatches`. Set in Sanity → API → Webhooks → Authorization header as `Bearer <pat>` (with the `Bearer ` prefix). Not stored in GitHub secrets — lives inside Sanity's webhook config. |
 | `RESEND_API_KEY` | Resend dash |
 | `PUBLIC_SITE_URL` | e.g. `https://example.com` |
 
