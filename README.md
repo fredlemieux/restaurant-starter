@@ -2,8 +2,7 @@
 
 Open-source scaffold for small-restaurant websites — a modern alternative to the typical WordPress + page-builder agency stack, built around static-first rendering, a headless CMS, and atomic deploys.
 
-<!-- If your Buy Me a Coffee handle isn't `fredlemieux`, sign up at buymeacoffee.com and swap the URL below. -->
-[![Buy me a beer](https://img.shields.io/badge/Buy%20me%20a%20beer-%F0%9F%8D%BA-yellow?style=flat-square)](https://buymeacoffee.com/fredlemieux)
+[![Buy me a beer](https://img.shields.io/badge/Buy%20me%20a%20beer-%F0%9F%8D%BA-00457C?style=flat-square&logo=paypal&logoColor=white)](https://paypal.me/frederiquelemieux1)
 
 > A restaurant site is ~95% static content + ~5% editable bits (menu, hours, what's-on). This repo solves both correctly, then deploys atomically with no cache to fight.
 
